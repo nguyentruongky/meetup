@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "resolveJsonModule": true,
+    "baseUrl": "./src",
+    "paths": {
+      "@/*": ["*"],
+    },
+    "esModuleInterop": true,
+    "target": "es5",
+    "module": "commonjs",
+    "outDir": "dist",
+  }
+}
