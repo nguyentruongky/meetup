@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "postinstall": "npx tsc",
-    "start": "tsc-watch --onSuccess \"node --require dotenv/config dist/main\"",
-    "startEnv": "node --require dotenv/config dist/main"
+    "start": "tsc-watch --onSuccess \"node --require dotenv/config dist/main\""
   },
   "keywords": [],
   "author": "",
