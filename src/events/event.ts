@@ -3,7 +3,7 @@ import MTime from "../models/time"
 import MUser from "../users/user"
 import UUID from "utils/uuid"
 
-export class Event {
+export default class MEvent {
     id: string
     title: string
     host: MUser
@@ -11,15 +11,15 @@ export class Event {
     attendees: MUser[]
     time: MTime
     location: MLocation
-    slotsLeft: number
+    slotCount: number
 
     constructor(raw: any) {
         this.id = UUID.generate()
         this.title = raw.title
         this.host = raw.host
         this.description = raw.description
-        this.time = new MTime(raw.time)
-        this.location = new MLocation(raw.location)
-        this.slotsLeft = raw.slotsLeft
+        this.time = new MTime(raw)
+        this.location = new MLocation(raw)
+        this.slotCount = raw.slotCount
     }
 }
