@@ -13,3 +13,4 @@ var Product = /** @class */ (function () {
     return Product;
 }());
 exports.Product = Product;
+//# sourceMappingURL=product.js.map

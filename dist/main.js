@@ -12,3 +12,4 @@ server.listen(3000).then(function (_a) {
     var url = _a.url;
     return console.log("Server ready at " + url);
 });
+//# sourceMappingURL=main.js.map
