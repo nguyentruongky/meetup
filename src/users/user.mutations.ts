@@ -1,14 +1,14 @@
 import MUser from "./user"
 import UserSQL from "./user.sql"
-import SQL from "../db/sql"
 import bcrypt from "bcrypt"
 const saltRound = 10
 
 export const userMutation = {
     register: async (_: any, raw: any) => {
+        const userSQL = new UserSQL()
+
         const email = raw.email
-        const sql = new SQL()
-        const exist = await sql.checkEmail(email)
+        const exist = await userSQL.checkEmailExist(email)
     
         if (exist) {
             throw Error("Email exists... ❌❌❌")
@@ -16,7 +16,6 @@ export const userMutation = {
         }
     
         const user = new MUser(raw)
-        const userSQL = new UserSQL()
         const pw = bcrypt.hashSync(user.password, saltRound)
         user.password = pw
         user.createdAt = new Date().getTime()

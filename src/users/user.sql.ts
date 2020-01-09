@@ -38,4 +38,10 @@ export default class UserSQL {
             return newUser
         }
     }
+
+    async checkEmailExist(email) {
+        const query = `select COUNT(email) > 0 exist from users where email = '${email}'`
+        const result = await runQuery(query)
+        return result.rows[0].exist
+    }
 }
