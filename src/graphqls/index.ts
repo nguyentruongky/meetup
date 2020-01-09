@@ -7,6 +7,7 @@ type Query {
 type Mutation {
   hello(message: String) : String
 }
+
 `
 ]
 

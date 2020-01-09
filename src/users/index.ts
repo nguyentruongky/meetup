@@ -1,6 +1,5 @@
 import { typeDefs } from "./user.graphql"
-import { register } from "./user.functions"
-import MUser from "./user"
+import {userMutation} from "./user.functions"
 
 const resolvers = {
     Query: {
@@ -9,9 +8,7 @@ const resolvers = {
         }
     },
 
-    Mutation: {
-        register
-    }
+    Mutation: userMutation
 }
 
 export default {

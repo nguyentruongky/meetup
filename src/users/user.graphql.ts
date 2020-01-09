@@ -16,5 +16,6 @@ extend type Query {
 
 extend type Mutation {
     register(email: String!, password: String!, name: String!): MUser!
+    login(email: String!, password: String!): MUser
 }
 `

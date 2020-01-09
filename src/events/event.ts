@@ -1,6 +1,6 @@
-import { MLocation } from "@/models/location"
-import { MTime } from "@/models/time"
-import MUser from "@/users/user"
+import { MLocation } from "../models/location"
+import { MTime } from "../models/time"
+import MUser from "../users/user"
 
 export class Event {
     id: string
