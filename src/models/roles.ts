@@ -1,4 +1,4 @@
-enum MRole {
+export enum MRole {
     Organizer,
     CoOrganizer,
     Admin,

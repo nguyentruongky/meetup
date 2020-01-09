@@ -1,6 +1,7 @@
-import { MLocation } from "../models/location"
-import { MTime } from "../models/time"
+import MLocation from "../models/location"
+import MTime from "../models/time"
 import MUser from "../users/user"
+import UUID from "utils/uuid"
 
 export class Event {
     id: string
@@ -12,23 +13,13 @@ export class Event {
     location: MLocation
     slotsLeft: number
 
-    constructor(
-        id: string,
-        title: string,
-        host: MUser,
-        description: string,
-        attendees: MUser[],
-        time: MTime,
-        location: MLocation,
-        slotsLeft: number
-    ) {
-        this.id = id
-        this.title = title
-        this.host = host
-        this.description = description
-        this.attendees = attendees
-        this.time = time
-        this.location = location
-        this.slotsLeft = slotsLeft
+    constructor(raw: any) {
+        this.id = UUID.generate()
+        this.title = raw.title
+        this.host = raw.host
+        this.description = raw.description
+        this.time = new MTime(raw.time)
+        this.location = new MLocation(raw.location)
+        this.slotsLeft = raw.slotsLeft
     }
 }

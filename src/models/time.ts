@@ -1,17 +1,12 @@
-export class MTime {
+export default class MTime {
     startAt: number
     endAt: number
     duration: number
     description: string
-    constructor(
-        startAt: number,
-        endAt: number,
-        duration: number,
-        description: string
-    ) {
-        this.startAt = startAt
-        this.endAt = endAt
-        this.duration = duration
-        this.description = description
+    constructor(raw: any) {
+        this.startAt = raw.startAt
+        this.endAt = raw.endAt
+        this.duration = raw.duration
+        this.description = raw.description
     }
 }

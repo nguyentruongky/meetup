@@ -1,17 +1,12 @@
-export class MLocation {
+export default class MLocation {
     address: string
     lat: number
     long: number
     description: string
-    constructor(
-        address: string,
-        lat: number,
-        long: number,
-        description: string
-    ) {
-        this.address = address
-        this.lat = lat
-        this.lat = long
-        this.description = description
+    constructor(raw: any) {
+        this.address = raw.address
+        this.lat = raw.lat
+        this.lat = raw.long
+        this.description = raw.description
     }
 }

@@ -1,4 +1,4 @@
-export class UUID {
+export default class UUID {
     public static generate(): string {
       return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (char) => {
         let random = Math.random() * 16 | 0; // Nachkommastellen abschneiden

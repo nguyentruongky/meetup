@@ -1,5 +1,5 @@
 import jwt from "jwt-simple"
-import { UUID } from "../utils/uuid"
+import UUID from "../utils/uuid"
 
 export default class MUser {
     id: string
@@ -7,11 +7,9 @@ export default class MUser {
     email: string
     password: string
     avatar: string
-    // location: MLocation
     introduction: string
     createdAt: number
     token: string
-    // role: MRole
 
     constructor(raw: any) {
         this.id = UUID.generate()
@@ -19,7 +17,6 @@ export default class MUser {
         this.avatar = raw.avatar
         this.email = raw.email
         this.password = raw.password
-        // this.location = location
         this.introduction = raw.introduction
     }
 
