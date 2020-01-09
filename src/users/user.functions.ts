@@ -1,7 +1,7 @@
 import MUser from "./user"
 import UserSQL from "./user.sql"
 import SQL from "../db/sql"
-
+import bcrypt from "bcrypt"
 
 export const register = async (_: any, raw: any) => {
     const email = raw.email
@@ -12,8 +12,12 @@ export const register = async (_: any, raw: any) => {
         return "Email existed."
     }
 
-    const newUser = new MUser(raw)
+    const user = new MUser(raw)
     const userSQL = new UserSQL()
-    const savedUser = await userSQL.register(newUser)
+    const pw = bcrypt.hashSync(user.password, 10)
+    user.password = pw
+    user.createdAt = new Date().getTime()
+    user.token = user.generateToken()
+    const savedUser = await userSQL.register(user)
     return savedUser
 }

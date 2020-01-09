@@ -1,5 +1,4 @@
-// import { MLocation } from "@/models/location"
-import jwt from "jsonwebtoken"
+import jwt from "jwt-simple"
 import { UUID } from "../utils/uuid"
 
 export default class MUser {
@@ -11,6 +10,7 @@ export default class MUser {
     // location: MLocation
     introduction: string
     createdAt: number
+    token: string
     // role: MRole
 
     constructor(raw: any) {
@@ -24,6 +24,6 @@ export default class MUser {
     }
 
     generateToken() {
-        return jwt.sign({ userId: this.id }, "shhhhh", { algorithm: "RS256" })
+        return jwt.encode({ userId: this.id }, "shhhhh", "HS512")
     }
 }
