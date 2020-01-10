@@ -1,5 +1,5 @@
 import jwt from "jwt-simple"
-import UUID from "../../utils/uuid"
+import UUID from "../utils/uuid"
 
 export default class MUser {
     id: string

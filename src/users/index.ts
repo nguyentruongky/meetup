@@ -11,7 +11,7 @@ const resolvers = {
     Mutation: mutations
 }
 
-export default {
-    typeDefs,
-    resolvers
+export default function setup(mainTypeDefs: any[], mainResolvers: any[]) {
+    mainTypeDefs.push(typeDefs)
+    mainResolvers.push(resolvers)
 }

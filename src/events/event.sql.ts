@@ -1,4 +1,4 @@
-import { runQuery } from "../../db/connection"
+import { runQuery } from "../db/connection"
 import MEvent from "./event"
 
 export default class EventSQL {

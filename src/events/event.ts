@@ -1,7 +1,7 @@
-import MLocation from "../../models/location"
-import MTime from "../../models/time"
+import MLocation from "../models/location"
+import MTime from "../models/time"
 import MUser from "../users/user"
-import UUID from "../../utils/uuid"
+import UUID from "../utils/uuid"
 
 export default class MEvent {
     id: string

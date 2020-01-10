@@ -1,6 +1,6 @@
 import MEvent from "./event"
 import EventSQL from "./event.sql"
-import MUser from "../../apis/users/user"
+import MUser from "../users/user"
 
 export const mutations = {
     createEvent: async (_: any, raw: any) => {

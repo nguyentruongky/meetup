@@ -1,5 +1,5 @@
 export let typeDefs: any[] = [
-    `
+`
 type Query {
   hello: String
 }
@@ -7,7 +7,6 @@ type Query {
 type Mutation {
   hello(message: String) : String
 }
-
 `
 ]
 
@@ -19,10 +18,8 @@ export let resolvers: any[] = [
     }
 ]
 
-import user from "../apis/users"
-typeDefs.push(user.typeDefs)
-resolvers.push(user.resolvers)
+import configUser from "../users"
+configUser(typeDefs, resolvers)
 
-import events from "../apis/events"
-typeDefs.push(events.typeDefs)
-resolvers.push(events.resolvers)
+import configEvent from "../events"
+configEvent(typeDefs, resolvers)
