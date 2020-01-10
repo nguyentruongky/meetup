@@ -6,7 +6,7 @@ export default class MLocation {
     constructor(raw: any) {
         this.address = raw.address
         this.lat = raw.lat
-        this.lat = raw.long
+        this.long = raw.long
         this.locationNotes = raw.locationNotes
     }
 }

@@ -19,6 +19,10 @@ export let resolvers: any[] = [
     }
 ]
 
-import user from "../users/index"
+import user from "../apis/users"
 typeDefs.push(user.typeDefs)
 resolvers.push(user.resolvers)
+
+import events from "../apis/events"
+typeDefs.push(events.typeDefs)
+resolvers.push(events.resolvers)

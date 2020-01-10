@@ -1,4 +1,4 @@
-import { runQuery } from "../db/connection"
+import { runQuery } from "../../db/connection"
 import MEvent from "./event"
 
 export default class EventSQL {
@@ -6,18 +6,18 @@ export default class EventSQL {
         const query = `
         insert into events 
         (
-            id, 
-            title, 
-            description, 
-            hostId,
-            startAt, 
-            duration, 
-            address, 
-            lat, 
-            long, 
-            locationNotes, 
-            slotCount, 
-            createdAt) 
+            "id", 
+            "title", 
+            "description", 
+            "hostId",
+            "startAt", 
+            "duration", 
+            "address", 
+            "lat", 
+            "long", 
+            "locationNotes", 
+            "slotCount", 
+            "createdAt") 
         values (
             '${event.id}',
             '${event.title}',

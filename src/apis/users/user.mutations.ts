@@ -3,7 +3,7 @@ import UserSQL from "./user.sql"
 import bcrypt from "bcrypt"
 const saltRound = 10
 
-export const userMutation = {
+export const mutations = {
     register: async (_: any, raw: any) => {
         const userSQL = new UserSQL()
 
@@ -21,6 +21,7 @@ export const userMutation = {
         user.createdAt = new Date().getTime()
         user.token = user.generateToken()
         const savedUser = await userSQL.register(user)
+        delete savedUser.password
         return savedUser
     },
     login: async (_: any, raw: any) => { 

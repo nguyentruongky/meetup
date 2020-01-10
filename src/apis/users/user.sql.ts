@@ -1,5 +1,5 @@
 import MUser from "./user"
-import { runQuery } from "../db/connection"
+import { runQuery } from "../../db/connection"
 import bcrypt from "bcrypt"
 
 export default class UserSQL {
