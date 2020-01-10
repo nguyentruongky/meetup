@@ -3,7 +3,7 @@ import EventSQL from "./event.sql"
 import MUser from "../users/user"
 
 export const mutations = {
-    createEvent: async (_: any, raw: any) => {
+    createEvent(_: any, raw: any) {
         const event = new MEvent(raw)
         if (event.title === "") {
             return Error("Title is empty")
@@ -28,7 +28,6 @@ export const mutations = {
         }
         
         event.host = new MUser({ name: "Ky"})
-        
         let eventSQL = new EventSQL()
         const newEvent = eventSQL.create(event)
         return newEvent

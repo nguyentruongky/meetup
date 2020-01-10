@@ -22,10 +22,11 @@ export default class UserSQL {
         const result = await runQuery(query)
         console.log(result)
 
-        if (result.rows.count > 1) {
+        const rowCount = result.rows.length
+        if (rowCount > 1) {
             console.log("Found 2 accounts with same email")
             throw Error("Server error.")
-        } else if (result.count == 0) {
+        } else if (rowCount == 0) {
             throw Error("Incorrect credentials")
         } else {
             const raw = result.rows[0]

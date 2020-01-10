@@ -11,11 +11,6 @@ type Mutation {
 ]
 
 export let resolvers: any[] = [
-    {
-        Query: {
-            hello: () => "Hello"
-        }
-    }
 ]
 
 import configUser from "../users"

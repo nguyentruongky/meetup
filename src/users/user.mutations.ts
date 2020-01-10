@@ -4,17 +4,17 @@ import bcrypt from "bcrypt"
 const saltRound = 10
 
 export const mutations = {
-    register: async (_: any, raw: any) => {
+    async register(_: any, raw: any) {
         const userSQL = new UserSQL()
 
         const email = raw.email
         const exist = await userSQL.checkEmailExist(email)
-    
+
         if (exist) {
             throw Error("Email exists... ❌❌❌")
             return
         }
-    
+
         const user = new MUser(raw)
         const pw = bcrypt.hashSync(user.password, saltRound)
         user.password = pw
@@ -24,12 +24,11 @@ export const mutations = {
         delete savedUser.password
         return savedUser
     },
-    login: async (_: any, raw: any) => { 
+    login(_: any, raw: any) {
         const email = raw.email
         const password = raw.password
-        
+
         const userSQL = new UserSQL()
-        const result = await userSQL.login(email, password)
-        return result
+        return userSQL.login(email, password)
     }
 }

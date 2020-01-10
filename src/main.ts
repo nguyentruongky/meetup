@@ -1,9 +1,14 @@
-import { ApolloServer } from "apollo-server"
+import { ApolloServer, GraphQLOptions } from "apollo-server"
 import { typeDefs, resolvers } from "./graphqls/index"
 
 const server = new ApolloServer({
     resolvers: resolvers,
     typeDefs: typeDefs,
+    context: ({req}) => {
+        const context: any = {}
+        context.userId = "123"
+        return context
+    },
     introspection: true,
     playground: true
 })
