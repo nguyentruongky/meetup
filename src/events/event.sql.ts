@@ -43,4 +43,10 @@ export default class EventSQL {
         const result = await runQuery(query)
         return result
     }
+
+    async getEvent(id: string) {
+        const query = `select * from events where id = '${id}'`
+        const result = await runQuery(query)
+        return result
+    }
 }

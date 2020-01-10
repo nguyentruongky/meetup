@@ -17,7 +17,7 @@ type MEvent {
 
 extend type Query {
     getEvents: [MEvent!]
-    getEvent(id: String!): [MEvent]
+    getEvent(id: String!): MEvent
 }
 
 extend type Mutation {

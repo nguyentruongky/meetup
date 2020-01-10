@@ -1,5 +1,5 @@
 export let typeDefs: any[] = [
-`
+    `
 type Query {
   hello: String
 }
@@ -19,7 +19,10 @@ export let resolvers: any[] = [
 ]
 
 import configUser from "../users"
-configUser(typeDefs, resolvers)
-
 import configEvent from "../events"
-configEvent(typeDefs, resolvers)
+[
+  configUser, 
+  configEvent
+].forEach(execute => {
+    execute(typeDefs, resolvers)
+})

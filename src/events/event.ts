@@ -14,7 +14,11 @@ export default class MEvent {
     slotCount: number
 
     constructor(raw: any) {
-        this.id = UUID.generate()
+        if (raw.id === undefined) {
+            this.id = UUID.generate()
+        } else {
+            this.id = raw.id
+        }
         this.title = raw.title
         this.host = raw.host
         this.description = raw.description
