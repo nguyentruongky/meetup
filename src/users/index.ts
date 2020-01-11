@@ -1,7 +1,7 @@
 import { typeDefs } from "./user.graphql"
 import { mutations } from "./user.mutations"
 
-const resolvers = {
+export const resolvers = {
     Query: {
         sayHello: () => {
             return "Saying hello"
@@ -9,9 +9,4 @@ const resolvers = {
     },
 
     Mutation: mutations
-}
-
-export default function setup(mainTypeDefs: any[], mainResolvers: any[]) {
-    mainTypeDefs.push(typeDefs)
-    mainResolvers.push(resolvers)
 }

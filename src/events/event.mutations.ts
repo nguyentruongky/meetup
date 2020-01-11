@@ -3,7 +3,11 @@ import EventSQL from "./event.sql"
 import MUser from "../users/user"
 
 export const mutations = {
-    createEvent(_: any, raw: any) {
+    createEvent(_: any, raw: any, context: any) {
+        const host: MUser = context.user 
+        if (host == undefined) {
+            return Error("You don't have permission to create event.")
+        }
         const event = new MEvent(raw)
         if (event.title === "") {
             return Error("Title is empty")
@@ -27,7 +31,7 @@ export const mutations = {
             event.slotCount = 0
         }
         
-        event.host = new MUser({ name: "Ky"})
+        event.host = host
         let eventSQL = new EventSQL()
         const newEvent = eventSQL.create(event)
         return newEvent

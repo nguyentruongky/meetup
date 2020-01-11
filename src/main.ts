@@ -1,13 +1,23 @@
 import { ApolloServer, GraphQLOptions } from "apollo-server"
-import { typeDefs, resolvers } from "./graphqls/index"
+import { mainTypeDefs as typeDefs, mainResolvers as resolvers } from "./graphqls/index"
+import UserSQL from "./users/user.sql"
+import MUser from "./users/user"
+import "./models"
 
 const server = new ApolloServer({
     resolvers: resolvers,
     typeDefs: typeDefs,
-    context: ({req}) => {
-        const context: any = {}
-        context.userId = "123"
-        return context
+    context: async ({ req }) => {
+        const reqContext: any = {}
+        const token = req.headers.authorization
+        if (token === undefined) {
+            return reqContext
+        }
+
+        const sql = new UserSQL()
+        const result = await sql.getUserByToken(token)
+        reqContext.user = result
+        return reqContext
     },
     introspection: true,
     playground: true
