@@ -31,9 +31,23 @@ var getFiles = function(path: string) {
                 file.includes("mutations") == true &&
                 file.includes("map") == false
             ) {
-                const {mutations} = require(path + "/" + file)
-                if (resolvers !== undefined) {
-                    mainResolvers.push(resolvers)
+                const { mutations } = require(path + "/" + file)
+                if (mutations !== undefined) {
+                    mainResolvers.push({
+                        Mutation: mutations
+                    })
+                }
+            }
+
+            if (
+                file.includes("queries") == true &&
+                file.includes("map") == false
+            ) {
+                const { queries } = require(path + "/" + file)
+                if (queries !== undefined) {
+                    mainResolvers.push({
+                        Query: queries
+                    })
                 }
             }
         }
@@ -41,4 +55,3 @@ var getFiles = function(path: string) {
 }
 getFiles(path)
 console.log(mainResolvers)
-
