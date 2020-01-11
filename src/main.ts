@@ -2,7 +2,6 @@ import { ApolloServer, GraphQLOptions } from "apollo-server"
 import { mainTypeDefs as typeDefs, mainResolvers as resolvers } from "./graphqls/index"
 import UserSQL from "./users/user.sql"
 import MUser from "./users/user"
-import "./models"
 
 const server = new ApolloServer({
     resolvers: resolvers,
