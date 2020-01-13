@@ -1,5 +1,5 @@
 import { runQuery } from "../db/connection"
-import MClub from "./event"
+import MClub from "./club"
 
 export default class EventSQL {
     async create(event: MClub) {

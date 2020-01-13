@@ -1,5 +1,5 @@
-import MClub from "./event"
-import EventSQL from "./event.sql"
+import MClub from "./club"
+import EventSQL from "./club.sql"
 
 export const queries = {
     getEvents: (_: any, raw: any) => {
