@@ -3,10 +3,10 @@ import MTime from "../models/time"
 import MUser from "../users/user"
 import UUID from "../utils/uuid"
 
-export default class MEvent {
+export default class MClub {
     id: string
     title: string
-    host: MUser
+    host: MUser[]
     description: string
     attendees: MUser[]
     time: MTime

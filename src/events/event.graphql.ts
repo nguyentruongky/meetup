@@ -1,26 +1,24 @@
 export const typeDefs = `
-type MEvent {
+type MClub {
     id: String!
     title: String!
-    host: MUser!
+    host: [MUser]!
     description: String!
     attendees: [MUser]
-    startAt: Float!
-    duration: Int!
-    address: String!
-    lat: Float!
-    long: Float!
-    locationNotes: String
+    time: MTime!
+    location: MLocation!
     slotCount: Int
     createdAt: Float
+    frequency: Frequency!
 }
 
 extend type Query {
-    getEvents: [MEvent!]
-    getEvent(id: String!): MEvent
+    getEvents: [MClub!]
+    getEvent(id: String!): MClub
 }
 
 extend type Mutation {
-    createEvent(title: String!, description: String!, startAt: Float!, duration: Int!, address: String!, lat: Float!, long: Float!, locationNotes: String, slotCount: Int): MEvent!
+    createEvent(title: String!, description: String!, startAt: Float!, duration: Int!, address: String!, lat: Float!, long: Float!, locationNotes: String, slotCount: Int): MClub!
 }
+
 `

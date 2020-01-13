@@ -54,4 +54,3 @@ var getFiles = function(path: string) {
     })
 }
 getFiles(path)
-console.log(mainResolvers)

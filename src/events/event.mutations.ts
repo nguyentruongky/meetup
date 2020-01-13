@@ -1,14 +1,14 @@
-import MEvent from "./event"
+import MClub from "./event"
 import EventSQL from "./event.sql"
 import MUser from "../users/user"
 
 export const mutations = {
     createEvent(_: any, raw: any, context: any) {
-        const host: MUser = context.user 
-        if (host == undefined) {
+        const creator: MUser = context.user 
+        if (creator == undefined) {
             return Error("You don't have permission to create event.")
         }
-        const event = new MEvent(raw)
+        const event = new MClub(raw)
         if (event.title === "") {
             return Error("Title is empty")
         }
@@ -31,6 +31,11 @@ export const mutations = {
             event.slotCount = 0
         }
         
+        let host: MUser[] = [creator]
+        if (event.host !== undefined) {
+            event.host.push(creator)
+            host = event.host
+        }
         event.host = host
         let eventSQL = new EventSQL()
         const newEvent = eventSQL.create(event)

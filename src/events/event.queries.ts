@@ -1,4 +1,4 @@
-import MEvent from "./event"
+import MClub from "./event"
 import EventSQL from "./event.sql"
 
 export const queries = {
@@ -7,7 +7,7 @@ export const queries = {
         return eventSQL.getEvents().then(result => {
             const eventsRaw: any[] = result.rows
             const events = eventsRaw.map(raw => {
-                return new MEvent(raw)
+                return new MClub(raw)
             })
             return events
         })
@@ -21,7 +21,7 @@ export const queries = {
             if (eventsRaw.length === 0) {
                 return null
             } else {
-                return new MEvent(eventsRaw[0])
+                return new MClub(eventsRaw[0])
             }
         })
     }

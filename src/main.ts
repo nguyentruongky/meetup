@@ -1,22 +1,30 @@
 import { ApolloServer, GraphQLOptions } from "apollo-server"
-import { mainTypeDefs as typeDefs, mainResolvers as resolvers } from "./graphqls/index"
+import { makeExecutableSchema } from "graphql-tools"
+import { applyMiddleware } from "graphql-middleware"
+
+import {
+    mainTypeDefs as typeDefs,
+    mainResolvers as resolvers
+} from "./graphqls/index"
 import UserSQL from "./users/user.sql"
-import MUser from "./users/user"
+import middlewares from "./middlewares"
+
+const schema = makeExecutableSchema({ typeDefs, resolvers })
+const schemaWithMiddleware = applyMiddleware(schema, ...middlewares)
 
 const server = new ApolloServer({
-    resolvers: resolvers,
-    typeDefs: typeDefs,
+    schema: schemaWithMiddleware,
     context: async ({ req }) => {
-        const reqContext: any = {}
+        const ctx: any = {}
         const token = req.headers.authorization
         if (token === undefined) {
-            return reqContext
+            return ctx
         }
 
         const sql = new UserSQL()
         const result = await sql.getUserByToken(token)
-        reqContext.user = result
-        return reqContext
+        ctx.user = result
+        return ctx
     },
     introspection: true,
     playground: true

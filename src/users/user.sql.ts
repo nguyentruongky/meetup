@@ -11,7 +11,6 @@ export default class UserSQL {
         ('${user.id}', '${user.email}', '${user.password}', '${user.name}', '${user.token}')
         `
         const result = await runQuery(query)
-        console.log(result)
         return user
     }
 
@@ -20,7 +19,6 @@ export default class UserSQL {
         select * from users where email = '${email}'
         `
         const result = await runQuery(query)
-        console.log(result)
 
         const rowCount = result.rows.length
         if (rowCount > 1) {

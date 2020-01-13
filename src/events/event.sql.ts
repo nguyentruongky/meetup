@@ -1,8 +1,13 @@
 import { runQuery } from "../db/connection"
-import MEvent from "./event"
+import MClub from "./event"
 
 export default class EventSQL {
-    async create(event: MEvent) {
+    async create(event: MClub) {
+        const hostIds = event.host.map(host => {
+            return host.id
+        })
+        const hostIdString = hostIds.join(",")
+
         const query = `
         insert into events 
         (
@@ -22,7 +27,7 @@ export default class EventSQL {
             '${event.id}',
             '${event.title}',
             '${event.description}',
-            '${event.host.id}',
+            '${hostIdString}',
             ${event.time.startAt},
             ${event.time.duration},
             '${event.location.address}',
