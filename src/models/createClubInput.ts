@@ -11,6 +11,7 @@ export default class CreateClubInput {
     location: MLocation
     slotCount: number
     frequency: Frequency
+    coverImageUrl: string
 
     constructor(raw: any, creator: MUser) {
         this.title = raw.title
@@ -28,5 +29,6 @@ export default class CreateClubInput {
         this.location = new MLocation(raw.location)
         this.slotCount = raw.slotCount
         this.frequency = raw.frequency
+        this.coverImageUrl = raw.coverImageUrl
     }
 }

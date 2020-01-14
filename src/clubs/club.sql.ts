@@ -23,6 +23,7 @@ export default class EventSQL {
             "locationNotes", 
             "slotCount", 
             "frequency",
+            "coverImageUrl",
             "createdAt") 
         values (
             '${event.id}',
@@ -36,6 +37,7 @@ export default class EventSQL {
             ${esc(event.location.locationNotes)},
             ${event.slotCount},
             '${event.frequency}',
+            ${esc(event.coverImageUrl)},
             ${new Date().getUTCSeconds()}
         )
         `

@@ -10,6 +10,7 @@ type MClub {
     slotCount: Int
     createdAt: Float
     frequency: Frequency!
+    coverImageUrl: String
 }
 
 extend type Query {

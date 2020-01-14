@@ -7,5 +7,6 @@ input CreateClubInput {
     location: MLocationInput!
     slotCount: Float!
     frequency: Frequency!
+    coverImageUrl: String
 }
 `

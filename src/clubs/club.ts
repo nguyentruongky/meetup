@@ -15,6 +15,7 @@ export default class MClub {
     location: MLocation
     slotCount: number
     frequency: Frequency
+    coverImageUrl: string
     static createFromInput(input: CreateClubInput): MClub {
         const club: MClub = new MClub({})
         club.id = UUID.generate()
@@ -25,6 +26,7 @@ export default class MClub {
         club.location = input.location
         club.slotCount = input.slotCount
         club.frequency = input.frequency
+        club.coverImageUrl = input.coverImageUrl
         return club
     }
     constructor(raw: any = {}) {
@@ -43,5 +45,6 @@ export default class MClub {
         this.location = new MLocation(raw)
         this.slotCount = raw.slotCount
         this.frequency = raw.frequency
+        this.coverImageUrl = raw.coverImageUrl
     }
 }
