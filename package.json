@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "postinstall": "npx tsc",
+    "postinstall": "npx tsc --clean",
     "start": "tsc-watch --onSuccess \"node --require dotenv/config dist/main\""
   },
   "keywords": [],
@@ -24,6 +24,7 @@
     "graphql-middleware": "^4.0.2",
     "jwt-simple": "^0.5.6",
     "pg": "^7.17.0",
+    "sqlstring": "^2.3.1",
     "ts-postgres": "^1.1.2"
   }
 }

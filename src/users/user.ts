@@ -11,8 +11,20 @@ export default class MUser {
     createdAt: number
     token: string
 
-    constructor(raw: any) {
-        this.id = UUID.generate()
+    static createFromId(id: string): MUser {
+        const user = new MUser({ id })
+        return user
+    }
+
+    constructor(raw: any = {}) {
+        if (Object.keys(raw).length === 0) { 
+            return
+        }
+        if (raw.id === undefined) {
+            this.id = UUID.generate()
+        } else {
+            this.id = raw.id
+        }
         this.name = raw.name
         this.avatar = raw.avatar
         this.email = raw.email

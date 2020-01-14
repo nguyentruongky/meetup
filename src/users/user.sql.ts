@@ -8,7 +8,11 @@ export default class UserSQL {
         insert into users 
         (id, email, password, name, token)
         values 
-        ('${user.id}', '${user.email}', '${user.password}', '${user.name}', '${user.token}')
+        ('${user.id}', 
+        '${escape(user.email)}', 
+        '${user.password}', 
+        '${escape(user.name)}', 
+        '${user.token}')
         `
         const result = await runQuery(query)
         return user
@@ -16,7 +20,7 @@ export default class UserSQL {
 
     async login(email: string, password: string) {
         const query = `
-        select * from users where email = '${email}'
+        select * from users where email = '${escape(email)}'
         `
         const result = await runQuery(query)
 
@@ -38,15 +42,15 @@ export default class UserSQL {
         }
     }
 
-    async checkEmailExist(email) {
-        const query = `select COUNT(email) > 0 exist from users where email = '${email}'`
+    async checkEmailExist(email: string) {
+        const query = `select COUNT(email) > 0 exist from users where email = '${escape(email)}'`
         const result = await runQuery(query)
         return result.rows[0].exist
     }
 
     async getUserByToken(token: string) {
         const query = `
-        select * from users where token = '${token}'
+        select * from users where token = '${escape(token)}'
         `
         const result = await runQuery(query)
 

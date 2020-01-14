@@ -6,7 +6,7 @@ export default class MTime {
     constructor(raw: any) {
         this.startAt = raw.startAt
         this.endAt = raw.endAt
-        this.duration = raw.duration
+        this.duration = raw.endAt - raw.startAt
         this.timeNotes = raw.timeNotes
     }
 }

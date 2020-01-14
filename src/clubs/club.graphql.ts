@@ -18,7 +18,7 @@ extend type Query {
 }
 
 extend type Mutation {
-    createClub(title: String!, description: String!, startAt: Float!, duration: Int!, address: String!, lat: Float!, long: Float!, locationNotes: String, slotCount: Int): MClub!
+    createClub(input: CreateClubInput): MClub!
 }
 
 `
