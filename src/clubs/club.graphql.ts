@@ -13,12 +13,12 @@ type MClub {
 }
 
 extend type Query {
-    getEvents: [MClub!]
-    getEvent(id: String!): MClub
+    clubs: [MClub!]
+    club(id: String!): MClub
 }
 
 extend type Mutation {
-    createClub(input: CreateClubInput): MClub!
+    club(input: CreateClubInput): MClub!
 }
 
 `

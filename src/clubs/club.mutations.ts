@@ -4,7 +4,7 @@ import MUser from "../users/user"
 import CreateClubInput from "../models/createClubInput"
 
 export const mutations = {
-    createClub(_: any, raw: any, context: any) {
+    club(_: any, raw: any, context: any) {
         const creator: MUser = context.user 
         if (creator == undefined) {
             return Error("You don't have permission to create event.")
