@@ -1,6 +1,6 @@
 import { runQuery } from "../db/connection"
 import MClub from "./club"
-import { esc, escRaw } from "../utils/utils"
+import { esc, escRaw, escapeObject } from "../utils/utils"
 
 export default class EventSQL {
     async create(event: MClub) {
@@ -9,38 +9,26 @@ export default class EventSQL {
         })
         const hostIdString = hostIds.join(",")
 
-        const query = `
-        insert into events 
-        (
-            "id", 
-            "title", 
-            "description", 
-            "hostIds",
-            "startAt", 
-            "endAt", 
-            "lat", 
-            "long", 
-            "locationNotes", 
-            "slotCount", 
-            "frequency",
-            "coverImageUrl",
-            "createdAt") 
-        values (
-            '${event.id}',
-            ${esc(event.title)},
-            ${esc(event.description)},
-            '${hostIdString}',
-            ${event.time.startAt},
-            ${event.time.endAt},
-            ${event.location.lat},
-            ${event.location.long},
-            ${esc(event.location.locationNotes)},
-            ${event.slotCount},
-            '${event.frequency}',
-            ${esc(event.coverImageUrl)},
-            ${new Date().getUTCSeconds()}
-        )
-        `
+        const dict: any = {
+            id: event.id,
+            title: event.title,
+            description: event.description,
+            hostIds: hostIdString,
+            startAt: event.time.startAt,
+            endAt: event.time.endAt,
+            lat: event.location.lat,
+            long: event.location.long,
+            locationNotes: event.location.locationNotes,
+            slotCount: event.slotCount,
+            frequency: event.frequency,
+            coverImageUrl: event.coverImageUrl,
+            createdAt: new Date().getUTCSeconds()
+        }
+        let query = `insert into events (%1) values (%2)`
+        const insertValue = escapeObject(dict)
+        query = query.replace("%1", insertValue.key)
+        query = query.replace("%2", insertValue.value)
+
         const result = await runQuery(query)
         return event
     }
