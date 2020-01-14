@@ -15,6 +15,7 @@ type MClub {
 extend type Query {
     clubs: [MClub!]
     club(id: String!): MClub
+    search(keyword: String!): [MClub!]
 }
 
 extend type Mutation {

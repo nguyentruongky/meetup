@@ -1,6 +1,6 @@
 import { runQuery } from "../db/connection"
 import MClub from "./club"
-import { esc } from "../utils/utils"
+import { esc, escRaw } from "../utils/utils"
 
 export default class EventSQL {
     async create(event: MClub) {
@@ -51,6 +51,13 @@ export default class EventSQL {
 
     async getClub(id: string) {
         const query = `select * from events where id = '${id}'`
+        const result = await runQuery(query)
+        return result
+    }
+
+    async searchByKeyword(keyword: string) {
+        const escKeyword = escRaw(keyword)
+        const query = `select * from events where title like '%${escKeyword}%' or description like '%${escKeyword}%'`
         const result = await runQuery(query)
         return result
     }

@@ -25,5 +25,17 @@ export const queries = {
                 return club
             }
         })
+    },
+
+    search(_: any, raw: any) {
+        const keyword = raw.keyword
+        let eventSQL = new EventSQL()
+        return eventSQL.searchByKeyword(keyword).then(result => {
+            const eventsRaw: any[] = result.rows
+            const events = eventsRaw.map(raw => {
+                return new MClub(raw)
+            })
+            return events
+        })
     }
 }
