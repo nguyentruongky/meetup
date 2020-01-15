@@ -30,6 +30,7 @@ export default class MUser {
         this.email = raw.email
         this.password = raw.password
         this.introduction = raw.introduction
+        this.token = raw.token
     }
 
     generateToken() {
