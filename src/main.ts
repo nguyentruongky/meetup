@@ -1,17 +1,10 @@
-import { ApolloServer, GraphQLOptions } from "apollo-server"
-import { makeExecutableSchema } from "graphql-tools"
-import { applyMiddleware } from "graphql-middleware"
+import { ApolloServer } from "apollo-server"
 
 import { mainResolvers as resolvers } from "./resolvers/index"
 import { schema } from "../schema"
 
 import UserSQL from "./users/user.sql"
-import middlewares from "./middlewares"
 import MContext from "./models/mcontext"
-
-
-// const schema1 = makeExecutableSchema({ schema, resolvers })
-// const schemaWithMiddleware = applyMiddleware(schema, ...middlewares)
 
 const server = new ApolloServer({
     typeDefs: schema,
@@ -23,10 +16,10 @@ const server = new ApolloServer({
         }
 
         const sql = new UserSQL()
-        const result = await sql.getUserByToken(token)
+        const user = await sql.getUserByToken(token)
         const ctx: MContext = {
-            token, 
-            user: result
+            token,
+            user
         }
         return ctx
     },

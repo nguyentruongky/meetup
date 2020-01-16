@@ -1,4 +1,3 @@
-import {MUser} from "../resolvers-types"
 import UserSQL from "./user.sql"
 import bcrypt from "bcrypt"
 import { MUserBuilder } from "../utils/builder"
@@ -6,7 +5,7 @@ const saltRound = 10
 import { MutationResolvers } from "resolvers-types"
 
 export const mutations: MutationResolvers = {
-    async register(root, args, ctx) {
+    register: async (root, args, ctx) => {
         const userSQL = new UserSQL()
 
         const email = args.email
@@ -25,7 +24,7 @@ export const mutations: MutationResolvers = {
         delete savedUser.password
         return savedUser
     },
-    login(root, args, ctx) {
+    login: async (root, args, ctx) => {
         const email = args.email
         const password = args.password
 

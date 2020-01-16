@@ -72,10 +72,15 @@ export const mutations: MutationResolvers = {
         const sql = new ClubSQL()
         return sql.quitClub(clubId, attendee.id).then(result => {
             if (result.rowCount === 1) {
-                return ClubAttendanceResultBuilder.create(ClubAttendanceStatus.Success)
+                return ClubAttendanceResultBuilder.create(
+                    ClubAttendanceStatus.Success
+                )
             }
 
-            return ClubAttendanceResultBuilder.create(ClubAttendanceStatus.Fail, "You don't register to this club")
+            return ClubAttendanceResultBuilder.create(
+                ClubAttendanceStatus.Fail,
+                "You don't register to this club"
+            )
         })
     }
 }
