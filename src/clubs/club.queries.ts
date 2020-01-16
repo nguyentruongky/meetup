@@ -1,9 +1,10 @@
-import {MClub} from "../resolvers-types"
+import { MClub } from "../resolvers-types"
 import EventSQL from "./club.sql"
 import { MClubBuilder } from "../utils/builder"
+import { QueryResolvers } from "resolvers-types"
 
-export const queries = {
-    clubs: (_: any, raw: any) => {
+export const queries: QueryResolvers = {
+    clubs: (root, args, ctx) => {
         let eventSQL = new EventSQL()
         return eventSQL.getClubs().then(result => {
             const eventsRaw: any[] = result.rows
@@ -13,9 +14,8 @@ export const queries = {
             return events
         })
     },
-
-    club(_: any, raw: any) {
-        const eventId = raw.id
+    club: (root, args, ctx) => {
+        const eventId = args.id
         let eventSQL = new EventSQL()
         return eventSQL.getClub(eventId).then(result => {
             const eventsRaw: any[] = result.rows
@@ -27,9 +27,8 @@ export const queries = {
             }
         })
     },
-
-    search(_: any, raw: any) {
-        const keyword = raw.keyword
+    search: (root, args, ctx) => {
+        const keyword = args.keyword
         let eventSQL = new EventSQL()
         return eventSQL.searchByKeyword(keyword).then(result => {
             const eventsRaw: any[] = result.rows
