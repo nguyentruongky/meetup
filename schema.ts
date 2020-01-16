@@ -23,6 +23,19 @@ type Query {
 
 type Mutation {
     club(input: CreateClubInput): MClub!
+    joinClub(clubId: String!): ClubAttendanceResult!
+    quitClub(clubId: String!): ClubAttendanceResult!
+}
+
+type ClubAttendanceResult {
+    status: ClubAttendanceStatus!
+    errorMessage: String
+}
+
+enum ClubAttendanceStatus {
+    success
+    fail
+    needPaymentSource
 }
 
 type MUser {

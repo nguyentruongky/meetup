@@ -9,7 +9,6 @@ import UserSQL from "./users/user.sql"
 import middlewares from "./middlewares"
 import MContext from "./models/mcontext"
 
-console.log(resolvers)
 
 // const schema1 = makeExecutableSchema({ schema, resolvers })
 // const schemaWithMiddleware = applyMiddleware(schema, ...middlewares)

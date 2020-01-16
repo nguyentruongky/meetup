@@ -3,7 +3,9 @@ import {
     MUser,
     MTime,
     MLocation,
-    CreateClubInput
+    CreateClubInput,
+    ClubAttendanceResult,
+    ClubAttendanceStatus
 } from "../resolvers-types"
 import UUID from "./uuid"
 import jwt from "jwt-simple"
@@ -97,5 +99,14 @@ export class MUserBuilder {
 
     static generateToken(userId: any) {
         return jwt.encode({ userId }, "shhhhh", "HS512")
+    }
+}
+
+export class ClubAttendanceResultBuilder {
+    static create(status: ClubAttendanceStatus, errorMessage: string = null): ClubAttendanceResult {
+        const result = new ClubAttendanceResult()
+        result.status = status
+        result.errorMessage = errorMessage
+        return result
     }
 }

@@ -22,7 +22,7 @@ export default class EventSQL {
             slotCount: event.slotCount,
             frequency: event.frequency,
             coverImageUrl: event.coverImageUrl,
-            createdAt: new Date().getUTCSeconds()
+            createdAt: Date.now()
         }
         let query = `insert into events (%1) values (%2)`
         const insertValue = escapeObject(dict)
@@ -48,6 +48,32 @@ export default class EventSQL {
     async searchByKeyword(keyword: string) {
         const escKeyword = escRaw(keyword)
         const query = `select * from events where title like '%${escKeyword}%' or description like '%${escKeyword}%'`
+        const result = await runQuery(query)
+        return result
+    }
+
+    async getAttendees(clubId: string) {
+        const query = `select * from "usersClubs", users where "clubId" = ${esc(clubId)} and users.id = "usersClubs"."userId"`
+        const result = await runQuery(query)
+        return result
+    }
+
+    async joinClub(clubId: string, userId: string) {
+        const dict: any = {
+            clubId,
+            userId,
+            joinedAt: Date.now()
+        }
+        let query = `insert into "usersClubs" (%1) values (%2)`
+        const insertValue = escapeObject(dict)
+        query = query.replace("%1", insertValue.key)
+        query = query.replace("%2", insertValue.value)
+        const result = await runQuery(query)
+        return result
+    }
+
+    async quitClub(clubId: string, userId: String) {
+        const query = `delete from "usersClubs" where "clubId" = ${esc(clubId)} and "userId" = ${esc(userId)}`
         const result = await runQuery(query)
         return result
     }
