@@ -41,6 +41,6 @@ export const _mutations: MutationResolvers = {
         club.host = host
         let sql = new ClubSQL()
         const newClub = sql.create(club)
-        return club
+        return newClub
     }
 }
