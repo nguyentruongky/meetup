@@ -1,6 +1,7 @@
-import MUser from "./user"
+import {MUser} from "../resolvers-types"
 import UserSQL from "./user.sql"
 import bcrypt from "bcrypt"
+import { MUserBuilder } from "../utils/builder"
 const saltRound = 10
 
 export const mutations = {
@@ -15,11 +16,11 @@ export const mutations = {
             return
         }
 
-        const user = new MUser(raw)
+        const user = MUserBuilder.create(raw)
         const pw = bcrypt.hashSync(user.password, saltRound)
         user.password = pw
         user.createdAt = new Date().getTime()
-        user.token = user.generateToken()
+        user.token = MUserBuilder.generateToken(user.id)
         const savedUser = await userSQL.register(user)
         delete savedUser.password
         return savedUser

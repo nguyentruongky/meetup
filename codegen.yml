@@ -1,0 +1,10 @@
+overwrite: true
+schema: "./schema.ts"
+documents: null
+generates:
+  ./src/resolvers-types.ts:
+    config:
+      declarationKind: 'class'
+    plugins:
+      - typescript
+      - typescript-resolvers

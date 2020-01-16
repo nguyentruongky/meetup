@@ -4,19 +4,24 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "postinstall": "npx tsc --clean",
-    "start": "tsc-watch --onSuccess \"node --require dotenv/config dist/main\""
+    "postinstall": "npx tsc",
+    "start": "tsc-watch --onSuccess \"node --require dotenv/config dist/main\"",
+    "gen": "graphql-codegen --config codegen.yml",
+    "clear": "rm -rf dist"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@graphql-codegen/cli": "^1.11.2",
+    "@graphql-codegen/typescript": "1.11.2",
     "dotenv": "^8.2.0",
     "ts-loader": "^6.2.1",
     "tsc-watch": "^4.0.0",
     "typescript": "^3.7.4"
   },
   "dependencies": {
+    "@graphql-codegen/typescript-resolvers": "^1.11.2",
     "@types/bcrypt": "^3.0.0",
     "apollo-server": "^2.9.14",
     "bcrypt": "^3.0.7",

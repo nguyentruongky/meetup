@@ -1,6 +1,6 @@
 import { runQuery } from "../db/connection"
-import MClub from "./club"
 import { esc, escRaw, escapeObject } from "../utils/utils"
+import { MClub } from "../resolvers-types"
 
 export default class EventSQL {
     async create(event: MClub) {

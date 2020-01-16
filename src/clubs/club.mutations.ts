@@ -1,7 +1,6 @@
-import MClub from "./club"
 import ClubSQL from "./club.sql"
-import MUser from "../users/user"
-import CreateClubInput from "../models/createClubInput"
+import { MClubBuilder } from "../utils/builder"
+import {CreateClubInput, MUser, MClub} from "../resolvers-types"
 
 export const mutations = {
     club(_: any, raw: any, context: any) {
@@ -9,8 +8,9 @@ export const mutations = {
         if (creator == undefined) {
             return Error("You don't have permission to create event.")
         }
-        const input = new CreateClubInput(raw.input, creator)
-        const club = MClub.createFromInput(input)
+
+        const input:CreateClubInput = raw.input
+        const club = MClubBuilder.createFromInput(input)
         if (club.title === "") {
             return Error("Title is empty")
         }

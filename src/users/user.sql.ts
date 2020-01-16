@@ -1,6 +1,7 @@
-import MUser from "./user"
+import {MUser} from "../resolvers-types"
 import { runQuery } from "../db/connection"
 import bcrypt from "bcrypt"
+import { MUserBuilder } from "../utils/builder"
 
 export default class UserSQL {
     async register(user: MUser) {
@@ -37,7 +38,7 @@ export default class UserSQL {
             if (isMatch == false) {
                 throw Error("Incorrect credentials")
             }
-            const newUser = new MUser(raw)
+            const newUser = MUserBuilder.create(raw)
             return newUser
         }
     }
@@ -61,7 +62,7 @@ export default class UserSQL {
             return null
         } else {
             const raw = result.rows[0]
-            const newUser = new MUser(raw)
+            const newUser = MUserBuilder.create(raw)
             return newUser
         }
     }

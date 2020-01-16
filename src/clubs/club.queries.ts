@@ -1,5 +1,6 @@
-import MClub from "./club"
+import {MClub} from "../resolvers-types"
 import EventSQL from "./club.sql"
+import { MClubBuilder } from "../utils/builder"
 
 export const queries = {
     clubs: (_: any, raw: any) => {
@@ -7,7 +8,7 @@ export const queries = {
         return eventSQL.getClubs().then(result => {
             const eventsRaw: any[] = result.rows
             const events = eventsRaw.map(raw => {
-                return new MClub(raw)
+                return MClubBuilder.create(raw)
             })
             return events
         })
@@ -21,7 +22,7 @@ export const queries = {
             if (eventsRaw.length === 0) {
                 return null
             } else {
-                const club = new MClub(eventsRaw[0])
+                const club = MClubBuilder.create(eventsRaw[0])
                 return club
             }
         })
@@ -33,7 +34,7 @@ export const queries = {
         return eventSQL.searchByKeyword(keyword).then(result => {
             const eventsRaw: any[] = result.rows
             const events = eventsRaw.map(raw => {
-                return new MClub(raw)
+                return MClubBuilder.create(raw)
             })
             return events
         })

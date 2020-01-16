@@ -3,7 +3,7 @@
     "resolveJsonModule": true,
     "baseUrl": "./src",
     "esModuleInterop": true,
-    "target": "es5",
+    "target": "es2015",
     "module": "commonjs",
     "outDir": "dist",
     "sourceMap": true
