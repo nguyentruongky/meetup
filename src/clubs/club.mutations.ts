@@ -2,7 +2,7 @@ import ClubSQL from "./club.sql"
 import { MClubBuilder } from "../utils/builder"
 import { CreateClubInput, MUser, MClub } from "../resolvers-types"
 import { MutationResolvers } from "resolvers-types"
-export const _mutations: MutationResolvers = {
+export const mutations: MutationResolvers = {
     club: (root, args, ctx) => {
         const creator: MUser = ctx.user
         if (creator == undefined) {
