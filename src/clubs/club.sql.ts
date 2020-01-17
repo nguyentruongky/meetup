@@ -24,7 +24,7 @@ export default class ClubSQL {
             coverImageUrl: event.coverImageUrl,
             createdAt: Date.now()
         }
-        let query = `insert into events (%1) values (%2)`
+        let query = `insert into clubs (%1) values (%2)`
         const insertValue = escapeObject(dict)
         query = query.replace("%1", insertValue.key)
         query = query.replace("%2", insertValue.value)
@@ -34,20 +34,20 @@ export default class ClubSQL {
     }
 
     async getClubs() {
-        const query = `select * from events`
+        const query = `select * from clubs`
         const result = await runQuery(query)
         return result
     }
 
     async getClub(id: string) {
-        const query = `select * from events where id = '${id}'`
+        const query = `select * from clubs where id = '${id}'`
         const result = await runQuery(query)
         return result
     }
 
     async searchByKeyword(keyword: string) {
         const escKeyword = escRaw(keyword)
-        const query = `select * from events where title like '%${escKeyword}%' or description like '%${escKeyword}%'`
+        const query = `select * from clubs where title like '%${escKeyword}%' or description like '%${escKeyword}%'`
         const result = await runQuery(query)
         return result
     }
@@ -79,7 +79,7 @@ export default class ClubSQL {
     }
     
     async getHostIds(clubId: string) {
-        const query = `select "hostIds" from events where id = ${esc(clubId)}`
+        const query = `select "hostIds" from clubs where id = ${esc(clubId)}`
         const result = await runQuery(query)
         return result
     }
