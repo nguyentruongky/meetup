@@ -2,6 +2,7 @@ import UserSQL from "./user.sql"
 import bcrypt from "bcrypt"
 import { MUserBuilder } from "../utils/builder"
 const saltRound = 10
+import Striper from "../utils/striper"
 import { MutationResolvers } from "resolvers-types"
 
 export const mutations: MutationResolvers = {
@@ -22,6 +23,12 @@ export const mutations: MutationResolvers = {
         user.token = MUserBuilder.generateToken(user.id)
         const savedUser = await userSQL.register(user)
         delete savedUser.password
+
+        const striper = new Striper()
+        striper.createCustomer(email, user.name).then(stripeUserId => {
+            userSQL.updateStripeUserId(savedUser.id, stripeUserId)
+        })
+
         return savedUser
     },
     login: async (root, args, ctx) => {

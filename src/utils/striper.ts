@@ -1,5 +1,5 @@
 import Stripe from "stripe"
-const stripe = new Stripe("sk_test_gUlPGbe57OnirEOH8xb6wHiS00VjQexdTh...", {
+const stripe = new Stripe("sk_test_gUlPGbe57OnirEOH8xb6wHiS00VjQexdTh", {
     apiVersion: "2019-12-03",
     typescript: true
 })
