@@ -2,7 +2,7 @@ import { GraphQLResolveInfo } from 'graphql';
 export type Maybe<T> = T | null;
 export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
-export class Scalars {
+export type Scalars = {
   ID: string;
   String: string;
   Boolean: boolean;
@@ -33,6 +33,24 @@ export class CreateClubInput {
   coverImageUrl?: Maybe<Scalars['String']>;
 };
 
+export class Fee {
+   __typename?: 'Fee';
+  id: Scalars['String'];
+  clubId: Scalars['String'];
+  amount?: Maybe<Scalars['Float']>;
+  currency?: Maybe<Scalars['String']>;
+  tierId?: Maybe<Scalars['String']>;
+  tierDescription?: Maybe<Scalars['String']>;
+};
+
+export class FeeInput {
+  clubId: Scalars['String'];
+  amount: Scalars['Float'];
+  currency: Scalars['String'];
+  tierId?: Maybe<Scalars['String']>;
+  tierDescription?: Maybe<Scalars['String']>;
+};
+
 export enum Frequency {
   Daily = 'daily',
   Weekly = 'weekly',
@@ -53,6 +71,7 @@ export class MClub {
   createdAt?: Maybe<Scalars['Float']>;
   frequency: Frequency;
   coverImageUrl?: Maybe<Scalars['String']>;
+  fee?: Maybe<Fee>;
 };
 
 export class MLocation {
@@ -99,6 +118,7 @@ export class MUser {
 
 export class Mutation {
    __typename?: 'Mutation';
+  addFee?: Maybe<Fee>;
   club: MClub;
   joinClub: ClubAttendanceResult;
   login?: Maybe<MUser>;
@@ -107,48 +127,52 @@ export class Mutation {
 };
 
 
-export class MutationClubArgs {
+export type MutationAddFeeArgs = {
+  fee: FeeInput
+};
+
+
+export type MutationClubArgs = {
   input?: Maybe<CreateClubInput>
 };
 
 
-export class MutationJoinClubArgs {
+export type MutationJoinClubArgs = {
   clubId: Scalars['String']
 };
 
 
-export class MutationLoginArgs {
-  email: Scalars['String']
+export type MutationLoginArgs = {
+  email: Scalars['String'],
   password: Scalars['String']
 };
 
 
-export class MutationQuitClubArgs {
+export type MutationQuitClubArgs = {
   clubId: Scalars['String']
 };
 
 
-export class MutationRegisterArgs {
-  email: Scalars['String']
-  password: Scalars['String']
+export type MutationRegisterArgs = {
+  email: Scalars['String'],
+  password: Scalars['String'],
   name: Scalars['String']
 };
 
 export class Query {
    __typename?: 'Query';
-  club?: Maybe<MClub>;
   clubs?: Maybe<Array<MClub>>;
-  sayHello?: Maybe<Scalars['String']>;
+  club?: Maybe<MClub>;
   search?: Maybe<Array<MClub>>;
 };
 
 
-export class QueryClubArgs {
+export type QueryClubArgs = {
   id: Scalars['String']
 };
 
 
-export class QuerySearchArgs {
+export type QuerySearchArgs = {
   keyword: Scalars['String']
 };
 
@@ -224,15 +248,17 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   Query: ResolverTypeWrapper<{}>,
-  String: ResolverTypeWrapper<Scalars['String']>,
   MClub: ResolverTypeWrapper<MClub>,
+  String: ResolverTypeWrapper<Scalars['String']>,
   MUser: ResolverTypeWrapper<MUser>,
   Float: ResolverTypeWrapper<Scalars['Float']>,
   MTime: ResolverTypeWrapper<MTime>,
   MLocation: ResolverTypeWrapper<MLocation>,
   Int: ResolverTypeWrapper<Scalars['Int']>,
   Frequency: Frequency,
+  Fee: ResolverTypeWrapper<Fee>,
   Mutation: ResolverTypeWrapper<{}>,
+  FeeInput: FeeInput,
   CreateClubInput: CreateClubInput,
   MTimeInput: MTimeInput,
   MLocationInput: MLocationInput,
@@ -244,15 +270,17 @@ export type ResolversTypes = {
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Query: {},
-  String: Scalars['String'],
   MClub: MClub,
+  String: Scalars['String'],
   MUser: MUser,
   Float: Scalars['Float'],
   MTime: MTime,
   MLocation: MLocation,
   Int: Scalars['Int'],
   Frequency: Frequency,
+  Fee: Fee,
   Mutation: {},
+  FeeInput: FeeInput,
   CreateClubInput: CreateClubInput,
   MTimeInput: MTimeInput,
   MLocationInput: MLocationInput,
@@ -264,6 +292,15 @@ export type ResolversParentTypes = {
 export type ClubAttendanceResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['ClubAttendanceResult'] = ResolversParentTypes['ClubAttendanceResult']> = {
   status?: Resolver<ResolversTypes['ClubAttendanceStatus'], ParentType, ContextType>,
   errorMessage?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+};
+
+export type FeeResolvers<ContextType = any, ParentType extends ResolversParentTypes['Fee'] = ResolversParentTypes['Fee']> = {
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  clubId?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  amount?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>,
+  currency?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  tierId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  tierDescription?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
 };
 
 export type MClubResolvers<ContextType = any, ParentType extends ResolversParentTypes['MClub'] = ResolversParentTypes['MClub']> = {
@@ -278,6 +315,7 @@ export type MClubResolvers<ContextType = any, ParentType extends ResolversParent
   createdAt?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>,
   frequency?: Resolver<ResolversTypes['Frequency'], ParentType, ContextType>,
   coverImageUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  fee?: Resolver<Maybe<ResolversTypes['Fee']>, ParentType, ContextType>,
 };
 
 export type MLocationResolvers<ContextType = any, ParentType extends ResolversParentTypes['MLocation'] = ResolversParentTypes['MLocation']> = {
@@ -306,6 +344,7 @@ export type MUserResolvers<ContextType = any, ParentType extends ResolversParent
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  addFee?: Resolver<Maybe<ResolversTypes['Fee']>, ParentType, ContextType, RequireFields<MutationAddFeeArgs, 'fee'>>,
   club?: Resolver<ResolversTypes['MClub'], ParentType, ContextType, MutationClubArgs>,
   joinClub?: Resolver<ResolversTypes['ClubAttendanceResult'], ParentType, ContextType, RequireFields<MutationJoinClubArgs, 'clubId'>>,
   login?: Resolver<Maybe<ResolversTypes['MUser']>, ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>,
@@ -314,14 +353,14 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  club?: Resolver<Maybe<ResolversTypes['MClub']>, ParentType, ContextType, RequireFields<QueryClubArgs, 'id'>>,
   clubs?: Resolver<Maybe<Array<ResolversTypes['MClub']>>, ParentType, ContextType>,
-  sayHello?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  club?: Resolver<Maybe<ResolversTypes['MClub']>, ParentType, ContextType, RequireFields<QueryClubArgs, 'id'>>,
   search?: Resolver<Maybe<Array<ResolversTypes['MClub']>>, ParentType, ContextType, RequireFields<QuerySearchArgs, 'keyword'>>,
 };
 
 export type Resolvers<ContextType = any> = {
   ClubAttendanceResult?: ClubAttendanceResultResolvers<ContextType>,
+  Fee?: FeeResolvers<ContextType>,
   MClub?: MClubResolvers<ContextType>,
   MLocation?: MLocationResolvers<ContextType>,
   MTime?: MTimeResolvers<ContextType>,

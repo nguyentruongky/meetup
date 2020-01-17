@@ -4,7 +4,9 @@ documents: null
 generates:
   ./src/resolvers-types.ts:
     config:
-      declarationKind: 'class'
+      declarationKind: 
+        type: 'class'
+        input: 'class'
     plugins:
       - typescript
       - typescript-resolvers

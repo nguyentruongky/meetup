@@ -13,6 +13,18 @@ type MClub {
     createdAt: Float
     frequency: Frequency!
     coverImageUrl: String
+    fee: Fee
+}
+
+input CreateClubInput {
+    title: String!
+    host: [String]
+    description: String!
+    time: MTimeInput!
+    location: MLocationInput!
+    slotCount: Float!
+    frequency: Frequency!
+    coverImageUrl: String
 }
 
 type Query {
@@ -25,6 +37,7 @@ type Mutation {
     club(input: CreateClubInput): MClub!
     joinClub(clubId: String!): ClubAttendanceResult!
     quitClub(clubId: String!): ClubAttendanceResult!
+    addFee(fee: FeeInput!): Fee
 }
 
 type ClubAttendanceResult {
@@ -38,6 +51,23 @@ enum ClubAttendanceStatus {
     needPaymentSource
 }
 
+type Fee {
+    id: String!
+    clubId: String!
+    amount: Float
+    currency: String
+    tierId: String
+    tierDescription: String
+}
+
+input FeeInput {
+    clubId: String!
+    amount: Float!
+    currency: String!
+    tierId: String
+    tierDescription: String
+}
+
 type MUser {
     id: String,
     name: String,
@@ -49,24 +79,9 @@ type MUser {
     createdAt: Float
 }
 
-extend type Query {
-    sayHello: String
-}
-
 extend type Mutation {
     register(email: String!, password: String!, name: String!): MUser!
     login(email: String!, password: String!): MUser
-}
-
-input CreateClubInput {
-    title: String!
-    host: [String]
-    description: String!
-    time: MTimeInput!
-    location: MLocationInput!
-    slotCount: Float!
-    frequency: Frequency!
-    coverImageUrl: String
 }
 
 enum Frequency {

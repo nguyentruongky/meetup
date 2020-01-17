@@ -1,14 +1,16 @@
 import {
     MClubBuilder,
     ClubAttendanceResultBuilder,
-    MUserBuilder
+    MUserBuilder,
+    FeeBuilder
 } from "../utils/builder"
 import {
     CreateClubInput,
     MUser,
     MClub,
     ClubAttendanceResult,
-    ClubAttendanceStatus
+    ClubAttendanceStatus,
+    Fee
 } from "../resolvers-types"
 import { MutationResolvers } from "resolvers-types"
 import ClubSQL from "./club.sql"
@@ -82,6 +84,25 @@ export const mutations: MutationResolvers = {
                 "You don't register to this club"
             )
         })
+    },
+
+     addFee: async (root, args, ctx): Promise<Fee> => {
+        const attendee: MUser = ctx.user
+        if (attendee == undefined) {
+            throw new Error("You don't have permission to add fee")
+        }
+
+        const clubId = args.fee.clubId
+        const isOwner = await checkClubOwner(clubId, attendee.id)
+        if (isOwner == false) {
+            throw new Error("You don't have permission to add fee")
+        }
+
+        const fee = FeeBuilder.create(args.fee)
+        const sql = new ClubSQL()
+        return sql.addFee(fee).then(result => { 
+            return fee
+        })
     }
 }
 
@@ -122,4 +143,18 @@ async function joinClubIfAvailable(clubId: string, user: MUser) {
     await clubSQL.joinClub(clubId, user.id)
 
     return ClubAttendanceResultBuilder.create(ClubAttendanceStatus.Success)
+}
+
+async function checkClubOwner(
+    clubId: string,
+    userId: string
+) {
+    const sql = new ClubSQL()
+    const result = await sql.getHostIds(clubId)
+    if (result.rows.length <= 0) {
+        throw new Error("Club doesn't exist")
+    }
+
+    const hostIds: string = result.rows[0].hostIds
+    return hostIds.includes(userId)
 }

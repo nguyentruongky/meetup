@@ -1,8 +1,8 @@
 import { runQuery } from "../db/connection"
 import { esc, escRaw, escapeObject } from "../utils/utils"
-import { MClub } from "../resolvers-types"
+import { MClub, Fee } from "../resolvers-types"
 
-export default class EventSQL {
+export default class ClubSQL {
     async create(event: MClub) {
         const hostIds = event.host.map(host => {
             return host.id
@@ -74,6 +74,30 @@ export default class EventSQL {
 
     async quitClub(clubId: string, userId: String) {
         const query = `delete from "usersClubs" where "clubId" = ${esc(clubId)} and "userId" = ${esc(userId)}`
+        const result = await runQuery(query)
+        return result
+    }
+    
+    async getHostIds(clubId: string) {
+        const query = `select "hostIds" from events where id = ${esc(clubId)}`
+        const result = await runQuery(query)
+        return result
+    }
+
+    async addFee(fee: Fee) {
+        const dict: any = {
+            id: fee.id,
+            clubId: fee.clubId,
+            amount: fee.amount,
+            currency: fee.currency,
+            tierId: fee.tierId,
+            tierDescription: fee.tierDescription,
+            createdAt: Date.now()
+        }
+        let query = `insert into "clubFees" (%1) values (%2)`
+        const insertValue = escapeObject(dict)
+        query = query.replace("%1", insertValue.key)
+        query = query.replace("%2", insertValue.value)
         const result = await runQuery(query)
         return result
     }

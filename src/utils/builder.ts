@@ -5,7 +5,9 @@ import {
     MLocation,
     CreateClubInput,
     ClubAttendanceResult,
-    ClubAttendanceStatus
+    ClubAttendanceStatus,
+    FeeInput,
+    Fee
 } from "../resolvers-types"
 import UUID from "./uuid"
 import jwt from "jwt-simple"
@@ -108,5 +110,18 @@ export class ClubAttendanceResultBuilder {
         result.status = status
         result.errorMessage = errorMessage
         return result
+    }
+}
+
+export class FeeBuilder {
+    static create(raw: FeeInput): Fee {
+        const fee = new Fee()
+        fee.id = UUID.generate()
+        fee.amount = raw.amount
+        fee.clubId = raw.clubId
+        fee.currency = raw.currency
+        fee.tierId = raw.tierId
+        fee.tierDescription = raw.tierDescription
+        return fee
     }
 }
