@@ -4,18 +4,22 @@
 -- https://tableplus.com/
 --
 -- Database: meetup
--- Generation Time: 2020-01-18 13:21:04.5880
+-- Generation Time: 2020-01-18 13:20:09.5160
 -- -------------------------------------------------------------
 
 
-DROP TABLE IF EXISTS "public"."usersClubs";
+DROP TABLE IF EXISTS "public"."clubFees";
 -- This script only contains the table creation statements and does not fully represent the table in the database. It's still missing: indices, triggers. Do not use it as a backup.
 
 -- Table Definition
-CREATE TABLE "public"."usersClubs" (
-    "userId" uuid NOT NULL,
-    "clubId" uuid NOT NULL,
-    "joinedAt" float8 NOT NULL,
-    PRIMARY KEY ("userId","clubId")
+CREATE TABLE "public"."clubFees" (
+    "id" uuid NOT NULL,
+    "clubId" uuid,
+    "amount" float4,
+    "currency" varchar,
+    "tierId" varchar,
+    "createdAt" float8,
+    "tierDescription" text,
+    PRIMARY KEY ("id")
 );
 
