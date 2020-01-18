@@ -69,19 +69,21 @@ input FeeInput {
 }
 
 type MUser {
-    id: String,
-    name: String,
-    email: String,
-    password: String,
-    token: String,
-    avatar: String,
-    introduction: String,
+    id: String
+    name: String
+    email: String
+    password: String
+    token: String
+    avatar: String
+    introduction: String
+    stripeUserId: String
     createdAt: Float
 }
 
 extend type Mutation {
     register(email: String!, password: String!, name: String!): MUser!
     login(email: String!, password: String!): MUser
+    addCard(number: String!, expMonth: String!, expYear: String!, cvc: String!): String!
 }
 
 enum Frequency {

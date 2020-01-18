@@ -113,17 +113,27 @@ export class MUser {
   token?: Maybe<Scalars['String']>;
   avatar?: Maybe<Scalars['String']>;
   introduction?: Maybe<Scalars['String']>;
+  stripeUserId?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['Float']>;
 };
 
 export class Mutation {
    __typename?: 'Mutation';
+  addCard: Scalars['String'];
   addFee?: Maybe<Fee>;
   club: MClub;
   joinClub: ClubAttendanceResult;
   login?: Maybe<MUser>;
   quitClub: ClubAttendanceResult;
   register: MUser;
+};
+
+
+export type MutationAddCardArgs = {
+  number: Scalars['String'],
+  expMonth: Scalars['String'],
+  expYear: Scalars['String'],
+  cvc: Scalars['String']
 };
 
 
@@ -340,10 +350,12 @@ export type MUserResolvers<ContextType = any, ParentType extends ResolversParent
   token?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   avatar?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   introduction?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  stripeUserId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   createdAt?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>,
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  addCard?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<MutationAddCardArgs, 'number' | 'expMonth' | 'expYear' | 'cvc'>>,
   addFee?: Resolver<Maybe<ResolversTypes['Fee']>, ParentType, ContextType, RequireFields<MutationAddFeeArgs, 'fee'>>,
   club?: Resolver<ResolversTypes['MClub'], ParentType, ContextType, MutationClubArgs>,
   joinClub?: Resolver<ResolversTypes['ClubAttendanceResult'], ParentType, ContextType, RequireFields<MutationJoinClubArgs, 'clubId'>>,

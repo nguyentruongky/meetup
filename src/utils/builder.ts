@@ -92,6 +92,7 @@ export class MUserBuilder {
         instance.password = raw.password
         instance.introduction = raw.introduction
         instance.token = raw.token
+        instance.stripeUserId = raw.stripeUserId
         return instance
     }
     static createFromId(id: string): MUser {

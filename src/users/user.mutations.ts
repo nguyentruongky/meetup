@@ -3,7 +3,7 @@ import bcrypt from "bcrypt"
 import { MUserBuilder } from "../utils/builder"
 const saltRound = 10
 import Striper from "../utils/striper"
-import { MutationResolvers } from "resolvers-types"
+import { MutationResolvers, MUser } from "../resolvers-types"
 
 export const mutations: MutationResolvers = {
     register: async (root, args, ctx) => {
@@ -37,5 +37,21 @@ export const mutations: MutationResolvers = {
 
         const userSQL = new UserSQL()
         return userSQL.login(email, password)
+    },
+    addCard: async (root, args, ctx) => {
+        const user: MUser = ctx.user
+        if (user == undefined) {
+            throw new Error("You need to login")
+        }
+
+        const striper = new Striper()
+        const cardId = await striper.addCard(
+            user.stripeUserId,
+            args.number,
+            args.expMonth,
+            args.expYear,
+            args.cvc
+        )
+        return cardId
     }
 }
