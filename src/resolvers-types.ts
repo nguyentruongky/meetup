@@ -120,6 +120,7 @@ export class MUser {
 export class Mutation {
    __typename?: 'Mutation';
   addCard: Scalars['String'];
+  addCardByToken: Scalars['String'];
   addFee?: Maybe<Fee>;
   club: MClub;
   joinClub: ClubAttendanceResult;
@@ -134,6 +135,11 @@ export type MutationAddCardArgs = {
   expMonth: Scalars['String'],
   expYear: Scalars['String'],
   cvc: Scalars['String']
+};
+
+
+export type MutationAddCardByTokenArgs = {
+  token: Scalars['String']
 };
 
 
@@ -356,6 +362,7 @@ export type MUserResolvers<ContextType = any, ParentType extends ResolversParent
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   addCard?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<MutationAddCardArgs, 'number' | 'expMonth' | 'expYear' | 'cvc'>>,
+  addCardByToken?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<MutationAddCardByTokenArgs, 'token'>>,
   addFee?: Resolver<Maybe<ResolversTypes['Fee']>, ParentType, ContextType, RequireFields<MutationAddFeeArgs, 'fee'>>,
   club?: Resolver<ResolversTypes['MClub'], ParentType, ContextType, MutationClubArgs>,
   joinClub?: Resolver<ResolversTypes['ClubAttendanceResult'], ParentType, ContextType, RequireFields<MutationJoinClubArgs, 'clubId'>>,

@@ -44,14 +44,49 @@ export const mutations: MutationResolvers = {
             throw new Error("You need to login")
         }
 
+        let stripeUserId = user.stripeUserId
+        if (stripeUserId === null) {
+            stripeUserId = await createStripeAccountIfNeeded(
+                user.id,
+                user.name,
+                user.email
+            )
+        }
+
         const striper = new Striper()
         const cardId = await striper.addCard(
-            user.stripeUserId,
+            stripeUserId,
             args.number,
             args.expMonth,
             args.expYear,
             args.cvc
         )
         return cardId
+    },
+    addCardByToken: async (root, args, ctx) => {
+        const user: MUser = ctx.user
+        if (user == undefined) {
+            throw new Error("You need to login")
+        }
+
+        const striper = new Striper()
+        const cardId = await striper.addCardByToken(
+            user.stripeUserId,
+            args.token
+        )
+        return cardId
     }
+}
+
+async function createStripeAccountIfNeeded(
+    id: string,
+    name: string,
+    email: string
+): Promise<string> {
+    const striper = new Striper()
+    return striper.createCustomer(email, name).then(stripeUserId => {
+        const userSQL = new UserSQL()
+        userSQL.updateStripeUserId(id, stripeUserId)
+        return stripeUserId
+    })
 }

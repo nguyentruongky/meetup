@@ -28,12 +28,23 @@ export default class Striper {
             exp_year: expYear,
             cvc: cvc
         }
-        const output: Stripe.Token = await stripe.tokens.create({ card })
+        const cardToken: Stripe.Token = await stripe.tokens.create({ card })
 
-        stripe.customers.createSource(stripeUserId, {
-            source: output.id
+        const output = stripe.customers.createSource(stripeUserId, {
+            source: cardToken.id
         })
 
-        return output.id
+        return (await output).id
+    }
+
+    async addCardByToken(
+        stripeUserId: string,
+        cardTokenId: string,
+    ): Promise<string> {
+        const card = await stripe.customers.createSource(stripeUserId, {
+            source: cardTokenId
+        })
+
+        return card.id
     }
 }
