@@ -123,6 +123,8 @@ export const mutations: MutationResolvers = {
         const stripe = new Striper()
         const result = await stripe.charge(stripeUserId, input.cardId, fee.amount, fee.currency)
         result.fee = fee
+
+        sql.saveEnrollment(result, user.id)
         return result
     }
 }

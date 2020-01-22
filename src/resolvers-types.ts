@@ -50,6 +50,7 @@ export class EnrollInput {
 export class EnrollOutput {
    __typename?: 'EnrollOutput';
   error?: Maybe<Scalars['String']>;
+  cardId: Scalars['String'];
   fee: Fee;
   enrollId: Scalars['String'];
   createdAt: Scalars['Float'];
@@ -355,6 +356,7 @@ export type ClubAttendanceResultResolvers<ContextType = any, ParentType extends 
 
 export type EnrollOutputResolvers<ContextType = any, ParentType extends ResolversParentTypes['EnrollOutput'] = ResolversParentTypes['EnrollOutput']> = {
   error?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  cardId?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   fee?: Resolver<ResolversTypes['Fee'], ParentType, ContextType>,
   enrollId?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   createdAt?: Resolver<ResolversTypes['Float'], ParentType, ContextType>,

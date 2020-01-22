@@ -48,6 +48,7 @@ input EnrollInput {
 
 type EnrollOutput {
     error: String
+    cardId: String!
     fee: Fee!
     enrollId: String!
     createdAt: Float!

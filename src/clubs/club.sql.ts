@@ -1,6 +1,6 @@
 import { runQuery } from "../db/connection"
 import { esc, escRaw, escapeObject } from "../utils/utils"
-import { MClub, Fee } from "../resolvers-types"
+import { MClub, Fee, EnrollOutput } from "../resolvers-types"
 
 export default class ClubSQL {
     async create(event: MClub) {
@@ -53,7 +53,9 @@ export default class ClubSQL {
     }
 
     async getAttendees(clubId: string) {
-        const query = `select * from "usersClubs", users where "clubId" = ${esc(clubId)} and users.id = "usersClubs"."userId"`
+        const query = `select * from "usersClubs", users where "clubId" = ${esc(
+            clubId
+        )} and users.id = "usersClubs"."userId"`
         const result = await runQuery(query)
         return result
     }
@@ -73,11 +75,13 @@ export default class ClubSQL {
     }
 
     async quitClub(clubId: string, userId: String) {
-        const query = `delete from "usersClubs" where "clubId" = ${esc(clubId)} and "userId" = ${esc(userId)}`
+        const query = `delete from "usersClubs" where "clubId" = ${esc(
+            clubId
+        )} and "userId" = ${esc(userId)}`
         const result = await runQuery(query)
         return result
     }
-    
+
     async getHostIds(clubId: string) {
         const query = `select "hostIds" from clubs where id = ${esc(clubId)}`
         const result = await runQuery(query)
@@ -104,6 +108,23 @@ export default class ClubSQL {
 
     async getFee(tierId: string) {
         const query = `select * from "clubFees" where id = ${esc(tierId)}`
+        const result = await runQuery(query)
+        return result
+    }
+
+    async saveEnrollment(data: EnrollOutput, userId: string) {
+        const params: any = {
+            errorMessage: data.error,
+            feeId: data.fee.id,
+            id: data.enrollId,
+            cardId: data.cardId,
+            createdAt: data.createdAt,
+            userId: userId
+        }
+        let query = `insert into "enrollment" (%1) values (%2)`
+        const insertValue = escapeObject(params)
+        query = query.replace("%1", insertValue.key)
+        query = query.replace("%2", insertValue.value)
         const result = await runQuery(query)
         return result
     }
