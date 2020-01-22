@@ -92,6 +92,8 @@ type MUser {
     introduction: String
     stripeUserId: String
     createdAt: Float
+    cards: [Card]
+    clubs: [MClub]
 }
 
 extend type Mutation {

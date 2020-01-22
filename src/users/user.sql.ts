@@ -74,4 +74,10 @@ export default class UserSQL {
         `
         runQuery(query)
     }
+
+    async getJoinedClubs(userId: string) {
+        const query = `select * from "usersClubs", "clubs" where "userId" = ${esc(userId)} and "clubId" = "clubs".id`
+        const result = await runQuery(query)
+        return result
+    }
 }

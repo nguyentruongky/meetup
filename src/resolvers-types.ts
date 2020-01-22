@@ -138,6 +138,8 @@ export class MUser {
   introduction?: Maybe<Scalars['String']>;
   stripeUserId?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['Float']>;
+  cards?: Maybe<Array<Maybe<Card>>>;
+  clubs?: Maybe<Array<Maybe<MClub>>>;
 };
 
 export class Mutation {
@@ -411,6 +413,8 @@ export type MUserResolvers<ContextType = any, ParentType extends ResolversParent
   introduction?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   stripeUserId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   createdAt?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>,
+  cards?: Resolver<Maybe<Array<Maybe<ResolversTypes['Card']>>>, ParentType, ContextType>,
+  clubs?: Resolver<Maybe<Array<Maybe<ResolversTypes['MClub']>>>, ParentType, ContextType>,
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
