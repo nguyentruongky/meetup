@@ -7,10 +7,12 @@ import {
     ClubAttendanceResult,
     ClubAttendanceStatus,
     FeeInput,
-    Fee
+    Fee,
+    Card
 } from "../resolvers-types"
 import UUID from "./uuid"
 import jwt from "jwt-simple"
+import Stripe from "stripe"
 
 export class MClubBuilder {
     static create(raw: any): MClub {
@@ -124,5 +126,17 @@ export class FeeBuilder {
         fee.tierId = raw.tierId
         fee.tierDescription = raw.tierDescription
         return fee
+    }
+}
+
+export class CardBuilder {
+    static create(raw: any): Card {
+        const c = new Card()
+        c.expMonth = raw.exp_month
+        c.expYear = raw.exp_year
+        c.id = raw.id
+        c.last4 = raw.last4
+        c.type = raw.brand
+        return c
     }
 }

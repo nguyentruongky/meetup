@@ -10,10 +10,13 @@ import {
     MClub,
     ClubAttendanceResult,
     ClubAttendanceStatus,
-    Fee
+    Fee,
+    EnrollInput,
+    EnrollOutput,
+    MutationResolvers
 } from "../resolvers-types"
-import { MutationResolvers } from "resolvers-types"
 import ClubSQL from "./club.sql"
+import Striper from "../utils/striper"
 export const mutations: MutationResolvers = {
     club: (root, args, ctx) => {
         const creator: MUser = ctx.user
@@ -86,23 +89,41 @@ export const mutations: MutationResolvers = {
         })
     },
 
-     addFee: async (root, args, ctx): Promise<Fee> => {
-        const attendee: MUser = ctx.user
-        if (attendee == undefined) {
+    addFee: async (root, args, ctx): Promise<Fee> => {
+        const user: MUser = ctx.user
+        if (user == undefined) {
             throw new Error("You don't have permission to add fee")
         }
 
         const clubId = args.fee.clubId
-        const isOwner = await checkClubOwner(clubId, attendee.id)
+        const isOwner = await checkClubOwner(clubId, user.id)
         if (isOwner == false) {
             throw new Error("You don't have permission to add fee")
         }
 
         const fee = FeeBuilder.create(args.fee)
         const sql = new ClubSQL()
-        return sql.addFee(fee).then(result => { 
+        return sql.addFee(fee).then(result => {
             return fee
         })
+    },
+
+    enroll: async (root, args, ctx): Promise<EnrollOutput> => {
+        const user: MUser = ctx.user
+        if (user == undefined) {
+            throw new Error("You don't have permission to add fee")
+        }
+        const input = args.input
+        const feeId = input.feeTierId
+        const sql = new ClubSQL()
+        const feeRaw = (await sql.getFee(feeId)).rows[0]
+        const fee = FeeBuilder.create(feeRaw)
+        const stripeUserId = user.stripeUserId
+
+        const stripe = new Striper()
+        const result = await stripe.charge(stripeUserId, input.cardId, fee.amount, fee.currency)
+        result.fee = fee
+        return result
     }
 }
 
@@ -145,10 +166,7 @@ async function joinClubIfAvailable(clubId: string, user: MUser) {
     return ClubAttendanceResultBuilder.create(ClubAttendanceStatus.Success)
 }
 
-async function checkClubOwner(
-    clubId: string,
-    userId: string
-) {
+async function checkClubOwner(clubId: string, userId: string) {
     const sql = new ClubSQL()
     const result = await sql.getHostIds(clubId)
     if (result.rows.length <= 0) {

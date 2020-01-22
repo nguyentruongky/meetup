@@ -1,7 +1,6 @@
-import { MClub } from "../resolvers-types"
 import ClubSQL from "./club.sql"
 import { MClubBuilder } from "../utils/builder"
-import { QueryResolvers } from "resolvers-types"
+import { MClub, QueryResolvers } from "../resolvers-types"
 
 export const queries: QueryResolvers = {
     clubs: (root, args, ctx) => {

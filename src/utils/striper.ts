@@ -1,4 +1,6 @@
 import Stripe from "stripe"
+import { EnrollOutput, Card } from "../resolvers-types"
+import { CardBuilder } from "./builder"
 const stripe = new Stripe("sk_test_gUlPGbe57OnirEOH8xb6wHiS00VjQexdTh", {
     apiVersion: "2019-12-03",
     typescript: true
@@ -39,12 +41,44 @@ export default class Striper {
 
     async addCardByToken(
         stripeUserId: string,
-        cardTokenId: string,
+        cardTokenId: string
     ): Promise<string> {
         const card = await stripe.customers.createSource(stripeUserId, {
             source: cardTokenId
         })
 
         return card.id
+    }
+
+    async charge(
+        stripeUserId: string,
+        cardId: string,
+        amount: number,
+        currency: string
+    ) {
+        const params: Stripe.ChargeCreateParams = {
+            customer: stripeUserId,
+            currency: currency,
+            amount: amount,
+            source: cardId
+        }
+
+        const result = await stripe.charges.create(params)
+        const output = new EnrollOutput()
+        output.enrollId = result.id
+        output.error = result.failure_message
+        output.createdAt = result.created
+        return output
+    }
+
+    async cardList(stripeUserId: string): Promise<Card[]> {
+        const params: Stripe.CustomerSourceListParams = {
+            object: "card"
+        }
+        const cards: any[] = await (await stripe.customers.listSources(stripeUserId, params)).data
+        const mCards = cards.map(value => {
+            return CardBuilder.create(value)
+        })
+        return mCards
     }
 }

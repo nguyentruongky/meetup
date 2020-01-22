@@ -38,6 +38,19 @@ type Mutation {
     joinClub(clubId: String!): ClubAttendanceResult!
     quitClub(clubId: String!): ClubAttendanceResult!
     addFee(fee: FeeInput!): Fee
+    enroll(input: EnrollInput): EnrollOutput!
+}
+
+input EnrollInput {
+    cardId: String!
+    feeTierId: String!
+}
+
+type EnrollOutput {
+    error: String
+    fee: Fee!
+    enrollId: String!
+    createdAt: Float!
 }
 
 type ClubAttendanceResult {
@@ -85,6 +98,18 @@ extend type Mutation {
     login(email: String!, password: String!): MUser
     addCard(number: String!, expMonth: String!, expYear: String!, cvc: String!): String!
     addCardByToken(token: String!): String!
+}
+
+extend type Query {
+    cards: [Card!]!
+}
+
+type Card {
+    id: String!
+    last4: String!
+    type: String!
+    expMonth: Int!
+    expYear: Int!
 }
 
 enum Frequency {

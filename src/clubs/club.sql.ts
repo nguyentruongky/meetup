@@ -101,4 +101,10 @@ export default class ClubSQL {
         const result = await runQuery(query)
         return result
     }
+
+    async getFee(tierId: string) {
+        const query = `select * from "clubFees" where id = ${esc(tierId)}`
+        const result = await runQuery(query)
+        return result
+    }
 }
