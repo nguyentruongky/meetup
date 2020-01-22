@@ -60,9 +60,9 @@ export class Fee {
    __typename?: 'Fee';
   id: Scalars['String'];
   clubId: Scalars['String'];
-  amount?: Maybe<Scalars['Float']>;
-  currency?: Maybe<Scalars['String']>;
-  tierId?: Maybe<Scalars['String']>;
+  amount: Scalars['Float'];
+  currency: Scalars['String'];
+  tierId: Scalars['String'];
   tierDescription?: Maybe<Scalars['String']>;
 };
 
@@ -365,9 +365,9 @@ export type EnrollOutputResolvers<ContextType = any, ParentType extends Resolver
 export type FeeResolvers<ContextType = any, ParentType extends ResolversParentTypes['Fee'] = ResolversParentTypes['Fee']> = {
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   clubId?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
-  amount?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>,
-  currency?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  tierId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  amount?: Resolver<ResolversTypes['Float'], ParentType, ContextType>,
+  currency?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  tierId?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   tierDescription?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
 };
 

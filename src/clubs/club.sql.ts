@@ -112,6 +112,12 @@ export default class ClubSQL {
         return result
     }
 
+    async getFeesOfClub(clubId: string) {
+        const query = `select * from "clubFees" where "clubId" = ${esc(clubId)}`
+        const result = await runQuery(query)
+        return result
+    }
+
     async saveEnrollment(data: EnrollOutput, userId: string) {
         const params: any = {
             errorMessage: data.error,

@@ -68,9 +68,9 @@ enum ClubAttendanceStatus {
 type Fee {
     id: String!
     clubId: String!
-    amount: Float
-    currency: String
-    tierId: String
+    amount: Float!
+    currency: String!
+    tierId: String!
     tierDescription: String
 }
 

@@ -11,7 +11,6 @@ import {
     ClubAttendanceResult,
     ClubAttendanceStatus,
     Fee,
-    EnrollInput,
     EnrollOutput,
     MutationResolvers
 } from "../resolvers-types"
@@ -106,39 +105,18 @@ export const mutations: MutationResolvers = {
         return sql.addFee(fee).then(result => {
             return fee
         })
-    },
-
-    enroll: async (root, args, ctx): Promise<EnrollOutput> => {
-        const user: MUser = ctx.user
-        if (user == undefined) {
-            throw new Error("You don't have permission to add fee")
-        }
-        const input = args.input
-        const feeId = input.feeTierId
-        const sql = new ClubSQL()
-        const feeRaw = (await sql.getFee(feeId)).rows[0]
-        const fee = FeeBuilder.create(feeRaw)
-        const stripeUserId = user.stripeUserId
-
-        const stripe = new Striper()
-        const result = await stripe.charge(stripeUserId, input.cardId, fee.amount, fee.currency)
-        result.fee = fee
-
-        sql.saveEnrollment(result, user.id)
-        return result
     }
 }
 
 async function joinClubIfAvailable(clubId: string, user: MUser) {
-    const clubSQL = new ClubSQL()
-    const result = await clubSQL.getClub(clubId)
+    const sql = new ClubSQL()
+    const result = await sql.getClub(clubId)
     const clubsRaw: any[] = result.rows
     if (clubsRaw.length === 0) {
         throw new Error(`Can't find club with id ${clubId}`)
-        return
     }
     const club = MClubBuilder.create(clubsRaw[0])
-    const attendeesRaw: any[] = (await clubSQL.getAttendees(clubId)).rows
+    const attendeesRaw: any[] = (await sql.getAttendees(clubId)).rows
     const attendees = attendeesRaw.map(raw => {
         return MUserBuilder.create(raw).id
     })
@@ -160,10 +138,53 @@ async function joinClubIfAvailable(clubId: string, user: MUser) {
         )
     }
 
-    // check payment
+    // get fee tier
+    let isFree = true
+    let fee: Fee
+    const feeTiersRaw = (await sql.getFeesOfClub(clubId)).rows
+    if (feeTiersRaw.length > 0) {
+        fee = FeeBuilder.create(feeTiersRaw[0])
+        isFree = false
+    }
+
+    if (isFree == false) {
+        const striper = new Striper()
+        // check stripe account created
+        let stripeUserId = user.stripeUserId
+        if (stripeUserId === undefined) {
+            stripeUserId = await striper.createCustomer(user.email, user.name)
+        }
+
+        // check payment method
+        const cards = await striper.cardList(stripeUserId)
+        if (cards.length === 0) {
+            return ClubAttendanceResultBuilder.create(
+                ClubAttendanceStatus.NeedPaymentSource,
+                "No card added"
+            )
+        }
+
+        // start charging
+        const cardId = cards[0].id
+        const chargeResult: EnrollOutput = await striper.charge(
+            stripeUserId,
+            cardId,
+            fee.amount * 100,
+            fee.currency
+        )
+        if (chargeResult.error) {
+            return ClubAttendanceResultBuilder.create(
+                ClubAttendanceStatus.Fail,
+                chargeResult.error
+            )
+        } else {
+            chargeResult.fee = fee
+            sql.saveEnrollment(chargeResult, user.id)
+        }
+    }
 
     // save info
-    await clubSQL.joinClub(clubId, user.id)
+    await sql.joinClub(clubId, user.id)
 
     return ClubAttendanceResultBuilder.create(ClubAttendanceStatus.Success)
 }
