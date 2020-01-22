@@ -103,6 +103,7 @@ extend type Mutation {
 
 extend type Query {
     cards: [Card!]!
+    me: MUser!
 }
 
 type Card {

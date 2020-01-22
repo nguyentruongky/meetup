@@ -209,6 +209,7 @@ export class Query {
   cards: Array<Card>;
   club?: Maybe<MClub>;
   clubs?: Maybe<Array<MClub>>;
+  me: MUser;
   search?: Maybe<Array<MClub>>;
 };
 
@@ -428,6 +429,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   cards?: Resolver<Array<ResolversTypes['Card']>, ParentType, ContextType>,
   club?: Resolver<Maybe<ResolversTypes['MClub']>, ParentType, ContextType, RequireFields<QueryClubArgs, 'id'>>,
   clubs?: Resolver<Maybe<Array<ResolversTypes['MClub']>>, ParentType, ContextType>,
+  me?: Resolver<ResolversTypes['MUser'], ParentType, ContextType>,
   search?: Resolver<Maybe<Array<ResolversTypes['MClub']>>, ParentType, ContextType, RequireFields<QuerySearchArgs, 'keyword'>>,
 };
 
