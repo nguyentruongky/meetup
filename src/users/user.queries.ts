@@ -1,6 +1,5 @@
 import * as Types from "../resolvers-types"
 import * as SQL from "../utils/sql"
-import * as Builder from "../utils/builder"
 import StripeHelper from "../utils/stripeHelper"
 import * as MError from "../utils/MError"
 
@@ -10,9 +9,7 @@ export const queries: Types.QueryResolvers = {
         if (user == undefined) {
             throw MError.Unauthorized
         }
-        const stripeUserId = user.stripeUserId
-        const striper = new StripeHelper()
-        return striper.cardList(stripeUserId)
+        return getCards(user)
     },
 
     me: async (root, args, ctx) => {
@@ -22,17 +19,23 @@ export const queries: Types.QueryResolvers = {
         }
         delete user.password
 
-        const stripeUserId = user.stripeUserId
-        if (stripeUserId) {
-            const striper = new StripeHelper()
-            const cards = await striper.cardList(stripeUserId)
-            user.cards = cards
-        } else {
-            user.cards = []
-        }
+        const cards = await getCards(user)
+        user.cards = cards
 
         const clubs = await SQL.User.getJoinedClubs(user.id)
         user.clubs = clubs.rows
         return user
+    }
+}
+
+async function getCards(user: Types.MUser): Promise<Types.Card[]> {
+    const stripeUserId = user.stripeUserId
+    const striper = new StripeHelper()
+    if (stripeUserId) {
+        return striper.cardList(stripeUserId)
+    } else {
+        const stripeUserId = await striper.createCustomer(user.email, user.name)
+        SQL.User.updateStripeUserId(user.id, stripeUserId)
+        return []
     }
 }

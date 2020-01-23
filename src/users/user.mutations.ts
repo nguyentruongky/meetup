@@ -60,7 +60,7 @@ export const mutations: Types.MutationResolvers = {
         }
 
         let stripeUserId = user.stripeUserId
-        if (stripeUserId === null) {
+        if (!stripeUserId) {
             stripeUserId = await createStripeAccountIfNeeded(
                 user.id,
                 user.name,
@@ -85,6 +85,14 @@ export const mutations: Types.MutationResolvers = {
         }
 
         const striper = new StripeHelper()
+        if (!user.stripeUserId) {
+            const stripeUserId = await createStripeAccountIfNeeded(
+                user.id,
+                user.name,
+                user.email
+            )
+            user.stripeUserId = stripeUserId
+        }
         const cardId = await striper.addCardByToken(
             user.stripeUserId,
             args.token
@@ -99,8 +107,7 @@ async function createStripeAccountIfNeeded(
     email: string
 ): Promise<string> {
     const striper = new StripeHelper()
-    return striper.createCustomer(email, name).then(stripeUserId => {
-        SQL.User.updateStripeUserId(id, stripeUserId)
-        return stripeUserId
-    })
+    const stripeUserId = await striper.createCustomer(email, name)
+    SQL.User.updateStripeUserId(id, stripeUserId)
+    return stripeUserId
 }
