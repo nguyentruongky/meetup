@@ -142,7 +142,7 @@ export default class ClubSQL {
     }
 
     async setFavorite(clubId: string, userId: string) {
-        const checkFavoriteQuery = `select count("userId") in "favoriteClubs  where "userId" = ${Utility.esc(
+        const checkFavoriteQuery = `select count("userId") in "favoriteClubs"  where "userId" = ${Utility.esc(
             userId
         )} and "clubId" = ${Utility.esc(clubId)}"`
         const result = await runQuery(checkFavoriteQuery)
