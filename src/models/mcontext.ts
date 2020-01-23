@@ -1,7 +1,7 @@
-import { MUser } from "../resolvers-types"
+import * as Types from "../resolvers-types"
 
 export default interface MContext {
-    token: string 
-    user: MUser
+    token: string
+    user: Types.MUser
     error: any
 }

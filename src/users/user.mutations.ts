@@ -1,12 +1,12 @@
 import UserSQL from "./user.sql"
 import bcrypt from "bcrypt"
-import { MUserBuilder } from "../utils/builder"
 const saltRound = 10
 import Striper from "../utils/striper"
-import { MutationResolvers, MUser } from "../resolvers-types"
+import * as Types from "../resolvers-types"
+import * as Builder from "../utils/builder"
 import { MErrorType } from "../utils/MError"
 
-export const mutations: MutationResolvers = {
+export const mutations: Types.MutationResolvers = {
     register: async (root, args, ctx) => {
         const userSQL = new UserSQL()
 
@@ -17,11 +17,11 @@ export const mutations: MutationResolvers = {
             throw new Error(MErrorType.EMAIL_EXIST)
         }
 
-        const user = MUserBuilder.create(args)
+        const user = Builder.User.MUserBuilder.create(args)
         const pw = bcrypt.hashSync(user.password, saltRound)
         user.password = pw
         user.createdAt = new Date().getTime()
-        user.token = MUserBuilder.generateToken(user.id)
+        user.token = Builder.User.MUserBuilder.generateToken(user.id)
         const savedUser = await userSQL.register(user)
         delete savedUser.password
 
@@ -51,13 +51,13 @@ export const mutations: MutationResolvers = {
             if (isMatch == false) {
                 throw new Error(MErrorType.UNAUTHORIZED)
             }
-            const newUser = MUserBuilder.create(raw)
+            const newUser = Builder.User.MUserBuilder.create(raw)
             return newUser
         }
-        return 
+        return
     },
     addCard: async (root, args, ctx) => {
-        const user: MUser = ctx.user
+        const user: Types.MUser = ctx.user
         if (user == undefined) {
             throw new Error(MErrorType.UNAUTHORIZED)
         }
@@ -82,7 +82,7 @@ export const mutations: MutationResolvers = {
         return cardId
     },
     addCardByToken: async (root, args, ctx) => {
-        const user: MUser = ctx.user
+        const user: Types.MUser = ctx.user
         if (user == undefined) {
             throw new Error(MErrorType.UNAUTHORIZED)
         }

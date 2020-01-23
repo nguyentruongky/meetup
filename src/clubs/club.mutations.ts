@@ -1,31 +1,17 @@
-import {
-    MClubBuilder,
-    ClubAttendanceResultBuilder,
-    MUserBuilder,
-    FeeBuilder
-} from "../utils/builder"
-import {
-    CreateClubInput,
-    MUser,
-    MClub,
-    ClubAttendanceResult,
-    ClubAttendanceStatus,
-    Fee,
-    EnrollOutput,
-    MutationResolvers
-} from "../resolvers-types"
+import * as Types from "../resolvers-types"
+import * as Builder from "../utils/builder"
 import ClubSQL from "./club.sql"
 import Striper from "../utils/striper"
 import { MErrorType } from "../utils/MError"
-export const mutations: MutationResolvers = {
+export const mutations: Types.MutationResolvers = {
     club: (root, args, ctx) => {
-        const creator: MUser = ctx.user
+        const creator: Types.MUser = ctx.user
         if (creator == undefined) {
             throw new Error(MErrorType.FORBIDDEN)
         }
 
-        const input: CreateClubInput = args.input
-        const club = MClubBuilder.createFromInput(input)
+        const input: Types.CreateClubInput = args.input
+        const club = Builder.Club.MClubBuilder.createFromInput(input)
         if (club.title === "") {
             throw new Error("Title is empty")
         }
@@ -48,7 +34,7 @@ export const mutations: MutationResolvers = {
             club.slotCount = 0
         }
 
-        let host: MUser[] = [creator]
+        let host: Types.MUser[] = [creator]
         if (club.host !== undefined) {
             club.host.push(creator)
             host = club.host
@@ -59,8 +45,8 @@ export const mutations: MutationResolvers = {
         return newClub
     },
 
-    joinClub: (root, args, ctx): Promise<ClubAttendanceResult> => {
-        const attendee: MUser = ctx.user
+    joinClub: (root, args, ctx): Promise<Types.ClubAttendanceResult> => {
+        const attendee: Types.MUser = ctx.user
         if (attendee == undefined) {
             throw new Error(MErrorType.UNAUTHORIZED)
         }
@@ -68,8 +54,8 @@ export const mutations: MutationResolvers = {
         return joinClubIfAvailable(clubId, attendee)
     },
 
-    quitClub: (root, args, ctx): Promise<ClubAttendanceResult> => {
-        const attendee: MUser = ctx.user
+    quitClub: (root, args, ctx): Promise<Types.ClubAttendanceResult> => {
+        const attendee: Types.MUser = ctx.user
         if (attendee == undefined) {
             throw new Error("You have to login")
         }
@@ -77,20 +63,20 @@ export const mutations: MutationResolvers = {
         const sql = new ClubSQL()
         return sql.quitClub(clubId, attendee.id).then(result => {
             if (result.rowCount === 1) {
-                return ClubAttendanceResultBuilder.create(
-                    ClubAttendanceStatus.Success
+                return Builder.Club.ClubAttendanceResultBuilder.create(
+                    Types.ClubAttendanceStatus.Success
                 )
             }
 
-            return ClubAttendanceResultBuilder.create(
-                ClubAttendanceStatus.Fail,
+            return Builder.Club.ClubAttendanceResultBuilder.create(
+                Types.ClubAttendanceStatus.Fail,
                 "You don't register to this club"
             )
         })
     },
 
-    addFee: async (root, args, ctx): Promise<Fee> => {
-        const user: MUser = ctx.user
+    addFee: async (root, args, ctx): Promise<Types.Fee> => {
+        const user: Types.MUser = ctx.user
         if (user == undefined) {
             throw new Error("You don't have permission to add fee")
         }
@@ -101,12 +87,12 @@ export const mutations: MutationResolvers = {
             throw new Error("You don't have permission to add fee")
         }
 
-        const fee = FeeBuilder.create(args.fee)
+        const fee = Builder.Club.FeeBuilder.create(args.fee)
         const sql = new ClubSQL()
         return sql.addFee(fee).then(result => {
             return fee
         })
-    },
+    }
 
     // favorite: (root, args, ctx): Promise<Boolean> => {
     //     const user: MUser = ctx.user
@@ -120,42 +106,42 @@ export const mutations: MutationResolvers = {
     // }
 }
 
-async function joinClubIfAvailable(clubId: string, user: MUser) {
+async function joinClubIfAvailable(clubId: string, user: Types.MUser) {
     const sql = new ClubSQL()
     const result = await sql.getClub(clubId)
     const clubsRaw: any[] = result.rows
     if (clubsRaw.length === 0) {
         throw new Error(`Can't find club with id ${clubId}`)
     }
-    const club = MClubBuilder.create(clubsRaw[0])
+    const club = Builder.Club.MClubBuilder.create(clubsRaw[0])
     const attendeesRaw: any[] = (await sql.getAttendees(clubId)).rows
     const attendees = attendeesRaw.map(raw => {
-        return MUserBuilder.create(raw).id
+        return Builder.User.MUserBuilder.create(raw).id
     })
 
     const attendeeCount = attendees.length
     const slotCount = club.slotCount === undefined ? 0 : club.slotCount
 
     if (attendees.includes(user.id)) {
-        return ClubAttendanceResultBuilder.create(
-            ClubAttendanceStatus.Fail,
+        return Builder.Club.ClubAttendanceResultBuilder.create(
+            Types.ClubAttendanceStatus.Fail,
             "You registed this event"
         )
     }
 
     if (slotCount <= attendeeCount) {
-        return ClubAttendanceResultBuilder.create(
-            ClubAttendanceStatus.Fail,
+        return Builder.Club.ClubAttendanceResultBuilder.create(
+            Types.ClubAttendanceStatus.Fail,
             "This club reached the attendee limit"
         )
     }
 
     // get fee tier
     let isFree = true
-    let fee: Fee
+    let fee: Types.Fee
     const feeTiersRaw = (await sql.getFeesOfClub(clubId)).rows
     if (feeTiersRaw.length > 0) {
-        fee = FeeBuilder.create(feeTiersRaw[0])
+        fee = Builder.Club.FeeBuilder.create(feeTiersRaw[0])
         isFree = false
     }
 
@@ -170,23 +156,23 @@ async function joinClubIfAvailable(clubId: string, user: MUser) {
         // check payment method
         const cards = await striper.cardList(stripeUserId)
         if (cards.length === 0) {
-            return ClubAttendanceResultBuilder.create(
-                ClubAttendanceStatus.NeedPaymentSource,
+            return Builder.Club.ClubAttendanceResultBuilder.create(
+                Types.ClubAttendanceStatus.NeedPaymentSource,
                 "No card added"
             )
         }
 
         // start charging
         const cardId = cards[0].id
-        const chargeResult: EnrollOutput = await striper.charge(
+        const chargeResult: Types.EnrollOutput = await striper.charge(
             stripeUserId,
             cardId,
             fee.amount * 100,
             fee.currency
         )
         if (chargeResult.error) {
-            return ClubAttendanceResultBuilder.create(
-                ClubAttendanceStatus.Fail,
+            return Builder.Club.ClubAttendanceResultBuilder.create(
+                Types.ClubAttendanceStatus.Fail,
                 chargeResult.error
             )
         } else {
@@ -198,7 +184,9 @@ async function joinClubIfAvailable(clubId: string, user: MUser) {
     // save info
     await sql.joinClub(clubId, user.id)
 
-    return ClubAttendanceResultBuilder.create(ClubAttendanceStatus.Success)
+    return Builder.Club.ClubAttendanceResultBuilder.create(
+        Types.ClubAttendanceStatus.Success
+    )
 }
 
 async function checkClubOwner(clubId: string, userId: string) {

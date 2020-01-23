@@ -1,11 +1,11 @@
-import { MUser } from "../resolvers-types"
+import * as Types from "../resolvers-types"
 import { runQuery } from "../db/connection"
 import bcrypt from "bcrypt"
-import { MUserBuilder } from "../utils/builder"
+import * as Builder from "../utils/builder"
 import { esc } from "../utils/utils"
 
 export default class UserSQL {
-    async register(user: MUser) {
+    async register(user: Types.MUser) {
         const query = `
         insert into users 
         (id, email, password, name, token)
@@ -49,7 +49,7 @@ export default class UserSQL {
             return null
         } else {
             const raw = result.rows[0]
-            const newUser = MUserBuilder.create(raw)
+            const newUser = Builder.User.MUserBuilder.create(raw)
             return newUser
         }
     }

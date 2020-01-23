@@ -1,6 +1,6 @@
 import Stripe from "stripe"
 import { EnrollOutput, Card } from "../resolvers-types"
-import { CardBuilder } from "./builder"
+import * as Builder from "./builder"
 const stripe = new Stripe("sk_test_gUlPGbe57OnirEOH8xb6wHiS00VjQexdTh", {
     apiVersion: "2019-12-03",
     typescript: true
@@ -80,7 +80,7 @@ export default class Striper {
             await stripe.customers.listSources(stripeUserId, params)
         ).data
         const mCards = cards.map(value => {
-            return CardBuilder.create(value)
+            return Builder.User.CardBuilder.create(value)
         })
         return mCards
     }

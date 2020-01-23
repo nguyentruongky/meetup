@@ -1,9 +1,9 @@
 import { runQuery } from "../db/connection"
 import { esc, escRaw, escapeObject } from "../utils/utils"
-import { MClub, Fee, EnrollOutput } from "../resolvers-types"
+import * as Types from "../resolvers-types"
 
 export default class ClubSQL {
-    async create(event: MClub) {
+    async create(event: Types.MClub) {
         const hostIds = event.host.map(host => {
             return host.id
         })
@@ -88,7 +88,7 @@ export default class ClubSQL {
         return result
     }
 
-    async addFee(fee: Fee) {
+    async addFee(fee: Types.Fee) {
         const dict: any = {
             id: fee.id,
             clubId: fee.clubId,
@@ -118,7 +118,7 @@ export default class ClubSQL {
         return result
     }
 
-    async saveEnrollment(data: EnrollOutput, userId: string) {
+    async saveEnrollment(data: Types.EnrollOutput, userId: string) {
         const params: any = {
             errorMessage: data.error,
             feeId: data.fee.id,
@@ -136,7 +136,9 @@ export default class ClubSQL {
     }
 
     async setFavorite(clubId: string, userId: string) {
-        const checkFavoriteQuery = `select count("userId") in "favoriteClubs  where "userId" = ${esc(userId)} and "clubId" = ${esc(clubId)}"`
+        const checkFavoriteQuery = `select count("userId") in "favoriteClubs  where "userId" = ${esc(
+            userId
+        )} and "clubId" = ${esc(clubId)}"`
         const result = await runQuery(checkFavoriteQuery)
         if (result.count === 0) {
             const params: any = {
@@ -150,7 +152,9 @@ export default class ClubSQL {
             runQuery(query)
             return true
         } else {
-            const query = `delete from "favoriteClubs" where "userId" = ${esc(userId)} and "clubId" = ${esc(clubId)}`
+            const query = `delete from "favoriteClubs" where "userId" = ${esc(
+                userId
+            )} and "clubId" = ${esc(clubId)}`
             runQuery(query)
             return false
         }
