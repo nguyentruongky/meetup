@@ -12,26 +12,35 @@ export const mutations: Types.MutationResolvers = {
 
         const input: Types.CreateClubInput = args.input
         const club = Builder.Club.MClubBuilder.createFromInput(input)
+        let errorMessage = ""
         if (club.title === "") {
-            throw new Error("Title is empty")
+            errorMessage = "Title is empty"
         }
         if (club.description === "") {
-            throw new Error("Description is empty")
+            errorMessage = "Description is empty"
         }
         if (club.time.startAt === 0) {
-            throw new Error("When does the event  start?")
+            errorMessage = "When does the event start?"
         }
-        if (club.time.duration === 0) {
-            throw new Error("How long does the event  last?")
+        if (club.time.endAt === 0) {
+            errorMessage = "When does the event end?"
         }
+        if (club.time.endAt - club.time.startAt < 0) {
+            errorMessage = "Invalid time"
+        }
+        
         if (club.location.address === "") {
-            throw new Error("Where does the event happen?")
+            errorMessage = "Where does the event happen?"
         }
         if (club.location.lat === 0 || club.location.long === 0) {
-            throw new Error("Invalid location address")
+            errorMessage = "Invalid location address"
         }
         if (club.slotCount === undefined) {
             club.slotCount = 0
+        }
+
+        if (errorMessage !== "") {
+            throw MError.error(MError.Type.BAD_REQUEST, errorMessage)
         }
 
         let host: Types.MUser[] = [creator]

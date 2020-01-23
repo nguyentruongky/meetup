@@ -6,7 +6,7 @@ import * as SQL from "./utils/sql"
 import * as Models from "./utils/models"
 
 import { formatError } from "./utils/MError"
-const errorName = formatError.errorName
+const errorNames = formatError.errorName
 
 const server = new ApolloServer({
     typeDefs: schema,
@@ -20,12 +20,20 @@ const server = new ApolloServer({
         const ctx: Models.MContext = {
             token,
             user,
-            error: errorName
+            error: errorNames
         }
         return ctx
     },
     formatError: err => {
-        return formatError.getError(err)
+        const error = formatError.getError(err)
+        const name = err.extensions.exception.name
+        if (name) {
+            const newError: any = {}
+            newError.message = name
+            newError.statusCode = error.statusCode
+            return newError
+        }
+        return error
     },
     introspection: true,
     playground: true
