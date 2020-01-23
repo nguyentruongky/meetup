@@ -1,5 +1,5 @@
 const FormatError = require("easygraphql-format-error")
-export enum MErrorType {
+export enum Type {
     UNAUTHORIZED = "UNAUTHORIZED",
     BAD_REQUEST = "BAD_REQUEST",
     NOT_FOUND = "NOT_FOUND",
@@ -9,12 +9,12 @@ export enum MErrorType {
 }
 export const formatError = new FormatError([
     {
-        name: MErrorType.UNAUTHORIZED,
+        name: Type.UNAUTHORIZED,
         message: "Unauthorized",
         statusCode: 401
     },
     {
-        name: MErrorType.EMAIL_EXIST,
+        name: Type.EMAIL_EXIST,
         message: "Email exist",
         statusCode: 403
     },
@@ -24,18 +24,18 @@ export const formatError = new FormatError([
         statusCode: 500
     },
     {
-        name: MErrorType.BAD_REQUEST,
+        name: Type.BAD_REQUEST,
         message: "Missing information",
         statusCode: 400
     },
     {
-        name: MErrorType.NOT_FOUND,
+        name: Type.NOT_FOUND,
         message: "Not Found",
         statusCode: 404
     },
     {
-        name: MErrorType.FORBIDDEN,
+        name: Type.FORBIDDEN,
         message: "You don't have permission",
         statusCode: 403
-    },
+    }
 ])

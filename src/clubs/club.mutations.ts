@@ -2,12 +2,12 @@ import * as Types from "../resolvers-types"
 import * as Builder from "../utils/builder"
 import ClubSQL from "./club.sql"
 import Striper from "../utils/striper"
-import { MErrorType } from "../utils/MError"
+import * as MError from "../utils/MError"
 export const mutations: Types.MutationResolvers = {
     club: (root, args, ctx) => {
         const creator: Types.MUser = ctx.user
         if (creator == undefined) {
-            throw new Error(MErrorType.FORBIDDEN)
+            throw new Error(MError.Type.FORBIDDEN)
         }
 
         const input: Types.CreateClubInput = args.input
@@ -48,7 +48,7 @@ export const mutations: Types.MutationResolvers = {
     joinClub: (root, args, ctx): Promise<Types.ClubAttendanceResult> => {
         const attendee: Types.MUser = ctx.user
         if (attendee == undefined) {
-            throw new Error(MErrorType.UNAUTHORIZED)
+            throw new Error(MError.Type.UNAUTHORIZED)
         }
         const clubId = args.clubId
         return joinClubIfAvailable(clubId, attendee)

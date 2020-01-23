@@ -4,7 +4,7 @@ const saltRound = 10
 import Striper from "../utils/striper"
 import * as Types from "../resolvers-types"
 import * as Builder from "../utils/builder"
-import { MErrorType } from "../utils/MError"
+import * as MError from "../utils/MError"
 
 export const mutations: Types.MutationResolvers = {
     register: async (root, args, ctx) => {
@@ -14,7 +14,7 @@ export const mutations: Types.MutationResolvers = {
         const exist = await userSQL.checkEmailExist(email)
 
         if (exist) {
-            throw new Error(MErrorType.EMAIL_EXIST)
+            throw new Error(MError.Type.EMAIL_EXIST)
         }
 
         const user = Builder.User.MUserBuilder.create(args)
@@ -41,15 +41,15 @@ export const mutations: Types.MutationResolvers = {
         const rowCount = result.rows.length
         if (rowCount > 1) {
             console.log("Found 2 accounts with same email")
-            throw new Error(MErrorType.INTERNAL_SERVER_ERROR)
+            throw new Error(MError.Type.INTERNAL_SERVER_ERROR)
         } else if (rowCount == 0) {
-            throw new Error(MErrorType.UNAUTHORIZED)
+            throw new Error(MError.Type.UNAUTHORIZED)
         } else {
             const raw = result.rows[0]
             const userPassword = raw.password
             const isMatch = bcrypt.compareSync(password, userPassword)
             if (isMatch == false) {
-                throw new Error(MErrorType.UNAUTHORIZED)
+                throw new Error(MError.Type.UNAUTHORIZED)
             }
             const newUser = Builder.User.MUserBuilder.create(raw)
             return newUser
@@ -59,7 +59,7 @@ export const mutations: Types.MutationResolvers = {
     addCard: async (root, args, ctx) => {
         const user: Types.MUser = ctx.user
         if (user == undefined) {
-            throw new Error(MErrorType.UNAUTHORIZED)
+            throw new Error(MError.Type.UNAUTHORIZED)
         }
 
         let stripeUserId = user.stripeUserId
@@ -84,7 +84,7 @@ export const mutations: Types.MutationResolvers = {
     addCardByToken: async (root, args, ctx) => {
         const user: Types.MUser = ctx.user
         if (user == undefined) {
-            throw new Error(MErrorType.UNAUTHORIZED)
+            throw new Error(MError.Type.UNAUTHORIZED)
         }
 
         const striper = new Striper()
