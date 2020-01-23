@@ -14,7 +14,7 @@ export const mutations: Types.MutationResolvers = {
         const exist = await userSQL.checkEmailExist(email)
 
         if (exist) {
-            throw new Error(MError.Type.EMAIL_EXIST)
+            throw MError.EmailExists
         }
 
         const user = Builder.User.MUserBuilder.create(args)
@@ -41,15 +41,15 @@ export const mutations: Types.MutationResolvers = {
         const rowCount = result.rows.length
         if (rowCount > 1) {
             console.log("Found 2 accounts with same email")
-            throw new Error(MError.Type.INTERNAL_SERVER_ERROR)
+            throw MError.Internal
         } else if (rowCount == 0) {
-            throw new Error(MError.Type.UNAUTHORIZED)
+            throw MError.Unauthorized
         } else {
             const raw = result.rows[0]
             const userPassword = raw.password
             const isMatch = bcrypt.compareSync(password, userPassword)
             if (isMatch == false) {
-                throw new Error(MError.Type.UNAUTHORIZED)
+                throw MError.Unauthorized
             }
             const newUser = Builder.User.MUserBuilder.create(raw)
             return newUser
@@ -59,7 +59,7 @@ export const mutations: Types.MutationResolvers = {
     addCard: async (root, args, ctx) => {
         const user: Types.MUser = ctx.user
         if (user == undefined) {
-            throw new Error(MError.Type.UNAUTHORIZED)
+            throw MError.Unauthorized
         }
 
         let stripeUserId = user.stripeUserId
@@ -84,7 +84,7 @@ export const mutations: Types.MutationResolvers = {
     addCardByToken: async (root, args, ctx) => {
         const user: Types.MUser = ctx.user
         if (user == undefined) {
-            throw new Error(MError.Type.UNAUTHORIZED)
+            throw MError.Unauthorized
         }
 
         const striper = new Striper()

@@ -7,7 +7,7 @@ export const mutations: Types.MutationResolvers = {
     club: (root, args, ctx) => {
         const creator: Types.MUser = ctx.user
         if (creator == undefined) {
-            throw new Error(MError.Type.FORBIDDEN)
+            throw MError.Forbidden
         }
 
         const input: Types.CreateClubInput = args.input
@@ -48,7 +48,7 @@ export const mutations: Types.MutationResolvers = {
     joinClub: (root, args, ctx): Promise<Types.ClubAttendanceResult> => {
         const attendee: Types.MUser = ctx.user
         if (attendee == undefined) {
-            throw new Error(MError.Type.UNAUTHORIZED)
+            throw MError.Unauthorized
         }
         const clubId = args.clubId
         return joinClubIfAvailable(clubId, attendee)

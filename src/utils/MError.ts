@@ -1,5 +1,6 @@
 const FormatError = require("easygraphql-format-error")
-export enum Type {
+
+enum Type {
     UNAUTHORIZED = "UNAUTHORIZED",
     BAD_REQUEST = "BAD_REQUEST",
     NOT_FOUND = "NOT_FOUND",
@@ -7,6 +8,14 @@ export enum Type {
     FORBIDDEN = "FORBIDDEN",
     EMAIL_EXIST = "EMAIL_EXIST"
 }
+
+export const Unauthorized = new Error(Type.UNAUTHORIZED)
+export const BadRequest = new Error(Type.BAD_REQUEST)
+export const NotFound = new Error(Type.NOT_FOUND)
+export const Internal = new Error(Type.INTERNAL_SERVER_ERROR)
+export const Forbidden = new Error(Type.FORBIDDEN)
+export const EmailExists = new Error(Type.EMAIL_EXIST)
+
 export const formatError = new FormatError([
     {
         name: Type.UNAUTHORIZED,

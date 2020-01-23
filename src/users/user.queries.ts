@@ -8,7 +8,7 @@ export const queries: Types.QueryResolvers = {
     cards: (root, args, ctx) => {
         const user: Types.MUser = ctx.user
         if (user == undefined) {
-            throw new Error(MError.Type.UNAUTHORIZED)
+            throw MError.Unauthorized
         }
         const stripeUserId = user.stripeUserId
         const striper = new Striper()
@@ -18,7 +18,7 @@ export const queries: Types.QueryResolvers = {
     me: async (root, args, ctx) => {
         const user: Types.MUser = ctx.user
         if (user == undefined) {
-            throw new Error(MError.Type.UNAUTHORIZED)
+            throw MError.Unauthorized
         }
         delete user.password
 
