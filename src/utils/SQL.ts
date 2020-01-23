@@ -1,3 +1,3 @@
 import * as User from "../users/user.sql"
-
-export { User }
+import * as Club from "../clubs/club.sql"
+export { User, Club }

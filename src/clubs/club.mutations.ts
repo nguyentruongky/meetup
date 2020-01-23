@@ -1,6 +1,6 @@
 import * as Types from "../resolvers-types"
 import * as Builder from "../utils/builder"
-import ClubSQL from "./club.sql"
+import * as SQL from "../utils/SQL"
 import Striper from "../utils/striper"
 import * as MError from "../utils/MError"
 export const mutations: Types.MutationResolvers = {
@@ -40,8 +40,7 @@ export const mutations: Types.MutationResolvers = {
             host = club.host
         }
         club.host = host
-        let sql = new ClubSQL()
-        const newClub = sql.create(club)
+        const newClub = SQL.Club.create(club)
         return newClub
     },
 
@@ -60,8 +59,7 @@ export const mutations: Types.MutationResolvers = {
             throw new Error("You have to login")
         }
         const clubId = args.clubId
-        const sql = new ClubSQL()
-        return sql.quitClub(clubId, attendee.id).then(result => {
+        return SQL.Club.quitClub(clubId, attendee.id).then(result => {
             if (result.rowCount === 1) {
                 return Builder.Club.ClubAttendanceResultBuilder.create(
                     Types.ClubAttendanceStatus.Success
@@ -88,8 +86,7 @@ export const mutations: Types.MutationResolvers = {
         }
 
         const fee = Builder.Club.FeeBuilder.create(args.fee)
-        const sql = new ClubSQL()
-        return sql.addFee(fee).then(result => {
+        return SQL.Club.addFee(fee).then(result => {
             return fee
         })
     }
@@ -107,14 +104,13 @@ export const mutations: Types.MutationResolvers = {
 }
 
 async function joinClubIfAvailable(clubId: string, user: Types.MUser) {
-    const sql = new ClubSQL()
-    const result = await sql.getClub(clubId)
+    const result = await SQL.Club.getClub(clubId)
     const clubsRaw: any[] = result.rows
     if (clubsRaw.length === 0) {
         throw new Error(`Can't find club with id ${clubId}`)
     }
     const club = Builder.Club.MClubBuilder.create(clubsRaw[0])
-    const attendeesRaw: any[] = (await sql.getAttendees(clubId)).rows
+    const attendeesRaw: any[] = (await SQL.Club.getAttendees(clubId)).rows
     const attendees = attendeesRaw.map(raw => {
         return Builder.User.MUserBuilder.create(raw).id
     })
@@ -139,7 +135,7 @@ async function joinClubIfAvailable(clubId: string, user: Types.MUser) {
     // get fee tier
     let isFree = true
     let fee: Types.Fee
-    const feeTiersRaw = (await sql.getFeesOfClub(clubId)).rows
+    const feeTiersRaw = (await SQL.Club.getFeesOfClub(clubId)).rows
     if (feeTiersRaw.length > 0) {
         fee = Builder.Club.FeeBuilder.create(feeTiersRaw[0])
         isFree = false
@@ -177,12 +173,12 @@ async function joinClubIfAvailable(clubId: string, user: Types.MUser) {
             )
         } else {
             chargeResult.fee = fee
-            sql.saveEnrollment(chargeResult, user.id)
+            SQL.Club.saveEnrollment(chargeResult, user.id)
         }
     }
 
     // save info
-    await sql.joinClub(clubId, user.id)
+    await SQL.Club.joinClub(clubId, user.id)
 
     return Builder.Club.ClubAttendanceResultBuilder.create(
         Types.ClubAttendanceStatus.Success
@@ -190,8 +186,7 @@ async function joinClubIfAvailable(clubId: string, user: Types.MUser) {
 }
 
 async function checkClubOwner(clubId: string, userId: string) {
-    const sql = new ClubSQL()
-    const result = await sql.getHostIds(clubId)
+    const result = await SQL.Club.getHostIds(clubId)
     if (result.rows.length <= 0) {
         throw new Error("Club doesn't exist")
     }
