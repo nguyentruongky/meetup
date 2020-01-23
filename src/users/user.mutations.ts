@@ -1,7 +1,7 @@
-import * as SQL from "../utils/SQL"
+import * as SQL from "../utils/sql"
 import bcrypt from "bcrypt"
 const saltRound = 10
-import Striper from "../utils/striper"
+import StripeHelper from "../utils/stripeHelper"
 import * as Types from "../resolvers-types"
 import * as Builder from "../utils/builder"
 import * as MError from "../utils/MError"
@@ -23,7 +23,7 @@ export const mutations: Types.MutationResolvers = {
         const savedUser = await SQL.User.register(user)
         delete savedUser.password
 
-        const striper = new Striper()
+        const striper = new StripeHelper()
         striper.createCustomer(email, user.name).then(stripeUserId => {
             SQL.User.updateStripeUserId(savedUser.id, stripeUserId)
         })
@@ -68,7 +68,7 @@ export const mutations: Types.MutationResolvers = {
             )
         }
 
-        const striper = new Striper()
+        const striper = new StripeHelper()
         const cardId = await striper.addCard(
             stripeUserId,
             args.number,
@@ -84,7 +84,7 @@ export const mutations: Types.MutationResolvers = {
             throw MError.Unauthorized
         }
 
-        const striper = new Striper()
+        const striper = new StripeHelper()
         const cardId = await striper.addCardByToken(
             user.stripeUserId,
             args.token
@@ -98,7 +98,7 @@ async function createStripeAccountIfNeeded(
     name: string,
     email: string
 ): Promise<string> {
-    const striper = new Striper()
+    const striper = new StripeHelper()
     return striper.createCustomer(email, name).then(stripeUserId => {
         SQL.User.updateStripeUserId(id, stripeUserId)
         return stripeUserId

@@ -1,12 +1,12 @@
 import Stripe from "stripe"
-import { EnrollOutput, Card } from "../resolvers-types"
+import * as Types from "../resolvers-types"
 import * as Builder from "./builder"
 const stripe = new Stripe("sk_test_gUlPGbe57OnirEOH8xb6wHiS00VjQexdTh", {
     apiVersion: "2019-12-03",
     typescript: true
 })
 
-export default class Striper {
+export default class StripeHelper {
     async createCustomer(email: string, name: string): Promise<string> {
         const params: Stripe.CustomerCreateParams = {
             description: name,
@@ -64,7 +64,7 @@ export default class Striper {
         }
 
         const result = await stripe.charges.create(params)
-        const output = new EnrollOutput()
+        const output = new Types.EnrollOutput()
         output.enrollId = result.id
         output.cardId = cardId
         output.error = result.failure_message
@@ -72,7 +72,7 @@ export default class Striper {
         return output
     }
 
-    async cardList(stripeUserId: string): Promise<Card[]> {
+    async cardList(stripeUserId: string): Promise<Types.Card[]> {
         const params: Stripe.CustomerSourceListParams = {
             object: "card"
         }

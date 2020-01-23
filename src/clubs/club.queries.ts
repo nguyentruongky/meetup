@@ -1,4 +1,4 @@
-import * as SQL from "../utils/SQL"
+import * as SQL from "../utils/sql"
 import * as Builder from "../utils/builder"
 import * as Types from "../resolvers-types"
 
