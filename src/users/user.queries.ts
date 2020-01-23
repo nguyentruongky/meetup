@@ -2,6 +2,7 @@ import * as Types from "../resolvers-types"
 import * as SQL from "../utils/sql"
 import StripeHelper from "../utils/stripeHelper"
 import * as MError from "../utils/MError"
+import * as Builder from "../utils/builder"
 
 export const queries: Types.QueryResolvers = {
     cards: (root, args, ctx) => {
@@ -24,7 +25,7 @@ export const queries: Types.QueryResolvers = {
 
         const clubs = await SQL.User.getJoinedClubs(user.id)
         user.clubs = clubs.rows
-        return user
+        return Builder.User.ProfileBuilder.create(user)
     }
 }
 

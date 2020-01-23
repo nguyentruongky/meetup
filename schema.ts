@@ -100,6 +100,18 @@ type MUser {
     clubs: [MClub]
 }
 
+type Profile {
+    id: String
+    name: String
+    email: String
+    avatar: String
+    introduction: String
+    stripeUserId: String
+    createdAt: Float
+    cards: [Card]
+    clubs: [MClub]
+}
+
 extend type Mutation {
     register(email: String!, password: String!, name: String!): MUser!
     login(email: String!, password: String!): MUser
@@ -109,7 +121,7 @@ extend type Mutation {
 
 extend type Query {
     cards: [Card!]!
-    me: MUser!
+    me: Profile!
 }
 
 type Card {

@@ -66,3 +66,19 @@ export class CardBuilder {
         return c
     }
 }
+
+export class ProfileBuilder {
+    static create(user: Types.MUser): Types.Profile {
+        const p = new Types.Profile()
+        p.avatar = user.avatar
+        p.cards = user.cards
+        p.clubs = user.clubs
+        p.createdAt = user.createdAt
+        p.email = user.email
+        p.id = user.id
+        p.introduction = user.introduction
+        p.name = user.name
+        p.stripeUserId = user.stripeUserId
+        return p
+    }
+}
