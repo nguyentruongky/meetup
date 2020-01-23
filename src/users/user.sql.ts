@@ -11,9 +11,9 @@ export default class UserSQL {
         (id, email, password, name, token)
         values 
         ('${user.id}', 
-        ${esc(user.email)}, 
+        ${Utility.esc(user.email)}, 
         '${user.password}', 
-        ${esc(user.name)}, 
+        ${Utility.esc(user.name)}, 
         '${user.token}')
         `
         const result = await runQuery(query)
@@ -56,7 +56,7 @@ export default class UserSQL {
 
     async updateStripeUserId(userId: string, stripeUserId: String) {
         const query = `
-        update users set "stripeUserId"=${esc(
+        update users set "stripeUserId"=${Utility.esc(
             stripeUserId
         )} where id = ${Utility.esc(userId)}
         `

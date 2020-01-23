@@ -1,5 +1,5 @@
 import * as Types from "../resolvers-types"
-import UUID from "../utils/uuid"
+import * as Utility from "../utils/utils"
 import jwt from "jwt-simple"
 import Stripe from "stripe"
 
@@ -32,7 +32,7 @@ export class MUserBuilder {
             return
         }
         if (raw.id === undefined) {
-            instance.id = UUID.generate()
+            instance.id = Utility.uuid()
         } else {
             instance.id = raw.id
         }

@@ -53,7 +53,7 @@ export default class ClubSQL {
     }
 
     async getAttendees(clubId: string) {
-        const query = `select * from "usersClubs", users where "clubId" = ${esc(
+        const query = `select * from "usersClubs", users where "clubId" = ${Utility.esc(
             clubId
         )} and users.id = "usersClubs"."userId"`
         const result = await runQuery(query)
