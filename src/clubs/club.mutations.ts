@@ -16,11 +16,12 @@ import {
 } from "../resolvers-types"
 import ClubSQL from "./club.sql"
 import Striper from "../utils/striper"
+import { MErrorType } from "../utils/MError"
 export const mutations: MutationResolvers = {
     club: (root, args, ctx) => {
         const creator: MUser = ctx.user
         if (creator == undefined) {
-            throw new Error("You don't have permission to create event.")
+            throw new Error(MErrorType.FORBIDDEN)
         }
 
         const input: CreateClubInput = args.input
@@ -61,7 +62,7 @@ export const mutations: MutationResolvers = {
     joinClub: (root, args, ctx): Promise<ClubAttendanceResult> => {
         const attendee: MUser = ctx.user
         if (attendee == undefined) {
-            throw new Error("You have to login")
+            throw new Error(MErrorType.UNAUTHORIZED)
         }
         const clubId = args.clubId
         return joinClubIfAvailable(clubId, attendee)
@@ -105,7 +106,18 @@ export const mutations: MutationResolvers = {
         return sql.addFee(fee).then(result => {
             return fee
         })
-    }
+    },
+
+    // favorite: (root, args, ctx): Promise<Boolean> => {
+    //     const user: MUser = ctx.user
+    //     if (user == undefined) {
+    //         throw new Error("Login needed")
+    //     }
+
+    //     const clubId = args.clubId
+    //     const sql = new ClubSQL()
+    //     return sql.setFavorite(clubId, user.id)
+    // }
 }
 
 async function joinClubIfAvailable(clubId: string, user: MUser) {

@@ -134,4 +134,25 @@ export default class ClubSQL {
         const result = await runQuery(query)
         return result
     }
+
+    async setFavorite(clubId: string, userId: string) {
+        const checkFavoriteQuery = `select count("userId") in "favoriteClubs  where "userId" = ${esc(userId)} and "clubId" = ${esc(clubId)}"`
+        const result = await runQuery(checkFavoriteQuery)
+        if (result.count === 0) {
+            const params: any = {
+                clubId: clubId,
+                userId: userId
+            }
+            const insertValue = escapeObject(params)
+            let query = `insert into "favoriteClubs" (%1) values (%2)`
+            query = query.replace("%1", insertValue.key)
+            query = query.replace("%2", insertValue.value)
+            runQuery(query)
+            return true
+        } else {
+            const query = `delete from "favoriteClubs" where "userId" = ${esc(userId)} and "clubId" = ${esc(clubId)}`
+            runQuery(query)
+            return false
+        }
+    }
 }

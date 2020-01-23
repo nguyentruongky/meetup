@@ -6,6 +6,9 @@ import { schema } from "../schema"
 import UserSQL from "./users/user.sql"
 import MContext from "./models/mcontext"
 
+import { formatError } from "./utils/MError"
+const errorName = formatError.errorName
+
 const server = new ApolloServer({
     typeDefs: schema,
     resolvers,
@@ -19,9 +22,13 @@ const server = new ApolloServer({
         const user = await sql.getUserByToken(token)
         const ctx: MContext = {
             token,
-            user
+            user,
+            error: errorName
         }
         return ctx
+    },
+    formatError: err => {
+        return formatError.getError(err)
     },
     introspection: true,
     playground: true

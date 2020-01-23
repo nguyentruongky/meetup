@@ -38,7 +38,7 @@ type Mutation {
     joinClub(clubId: String!): ClubAttendanceResult!
     quitClub(clubId: String!): ClubAttendanceResult!
     addFee(fee: FeeInput!): Fee
-    enroll(input: EnrollInput): EnrollOutput!
+    favorite(clubId: String!): Boolean
 }
 
 input EnrollInput {

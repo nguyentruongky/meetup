@@ -2,12 +2,13 @@ import { MClub, Card, MUser, QueryResolvers } from "../resolvers-types"
 import UserSQL from "./user.sql"
 import { MClubBuilder } from "../utils/builder"
 import Striper from "../utils/striper"
+import { MErrorType } from "../utils/MError"
 
 export const queries: QueryResolvers = {
     cards: (root, args, ctx) => {
         const user: MUser = ctx.user
         if (user == undefined) {
-            throw new Error("You have to login")
+            throw new Error(MErrorType.UNAUTHORIZED)
         }
         const stripeUserId = user.stripeUserId
         const striper = new Striper()
@@ -17,7 +18,7 @@ export const queries: QueryResolvers = {
     me: async (root, args, ctx) => { 
         const user: MUser = ctx.user
         if (user == undefined) {
-            throw new Error("Invalid token")
+            throw new Error(MErrorType.UNAUTHORIZED)
         }
         delete user.password
 

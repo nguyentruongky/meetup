@@ -148,7 +148,7 @@ export class Mutation {
   addCardByToken: Scalars['String'];
   addFee?: Maybe<Fee>;
   club: MClub;
-  enroll: EnrollOutput;
+  favorite?: Maybe<Scalars['Boolean']>;
   joinClub: ClubAttendanceResult;
   login?: Maybe<MUser>;
   quitClub: ClubAttendanceResult;
@@ -179,8 +179,8 @@ export type MutationClubArgs = {
 };
 
 
-export type MutationEnrollArgs = {
-  input?: Maybe<EnrollInput>
+export type MutationFavoriteArgs = {
+  clubId: Scalars['String']
 };
 
 
@@ -312,11 +312,11 @@ export type ResolversTypes = {
   CreateClubInput: CreateClubInput,
   MTimeInput: MTimeInput,
   MLocationInput: MLocationInput,
-  EnrollInput: EnrollInput,
-  EnrollOutput: ResolverTypeWrapper<EnrollOutput>,
+  Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
   ClubAttendanceResult: ResolverTypeWrapper<ClubAttendanceResult>,
   ClubAttendanceStatus: ClubAttendanceStatus,
-  Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
+  EnrollInput: EnrollInput,
+  EnrollOutput: ResolverTypeWrapper<EnrollOutput>,
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -337,11 +337,11 @@ export type ResolversParentTypes = {
   CreateClubInput: CreateClubInput,
   MTimeInput: MTimeInput,
   MLocationInput: MLocationInput,
-  EnrollInput: EnrollInput,
-  EnrollOutput: EnrollOutput,
+  Boolean: Scalars['Boolean'],
   ClubAttendanceResult: ClubAttendanceResult,
   ClubAttendanceStatus: ClubAttendanceStatus,
-  Boolean: Scalars['Boolean'],
+  EnrollInput: EnrollInput,
+  EnrollOutput: EnrollOutput,
 };
 
 export type CardResolvers<ContextType = any, ParentType extends ResolversParentTypes['Card'] = ResolversParentTypes['Card']> = {
@@ -422,7 +422,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   addCardByToken?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<MutationAddCardByTokenArgs, 'token'>>,
   addFee?: Resolver<Maybe<ResolversTypes['Fee']>, ParentType, ContextType, RequireFields<MutationAddFeeArgs, 'fee'>>,
   club?: Resolver<ResolversTypes['MClub'], ParentType, ContextType, MutationClubArgs>,
-  enroll?: Resolver<ResolversTypes['EnrollOutput'], ParentType, ContextType, MutationEnrollArgs>,
+  favorite?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationFavoriteArgs, 'clubId'>>,
   joinClub?: Resolver<ResolversTypes['ClubAttendanceResult'], ParentType, ContextType, RequireFields<MutationJoinClubArgs, 'clubId'>>,
   login?: Resolver<Maybe<ResolversTypes['MUser']>, ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>,
   quitClub?: Resolver<ResolversTypes['ClubAttendanceResult'], ParentType, ContextType, RequireFields<MutationQuitClubArgs, 'clubId'>>,
