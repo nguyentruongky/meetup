@@ -1,4 +1,4 @@
-import UserSQL from "./user.sql"
+import * as SQL from "../utils/SQL"
 import bcrypt from "bcrypt"
 const saltRound = 10
 import Striper from "../utils/striper"
@@ -8,10 +8,8 @@ import * as MError from "../utils/MError"
 
 export const mutations: Types.MutationResolvers = {
     register: async (root, args, ctx) => {
-        const userSQL = new UserSQL()
-
         const email = args.email
-        const exist = await userSQL.checkEmailExist(email)
+        const exist = await SQL.User.checkEmailExist(email)
 
         if (exist) {
             throw MError.EmailExists
@@ -22,12 +20,12 @@ export const mutations: Types.MutationResolvers = {
         user.password = pw
         user.createdAt = new Date().getTime()
         user.token = Builder.User.MUserBuilder.generateToken(user.id)
-        const savedUser = await userSQL.register(user)
+        const savedUser = await SQL.User.register(user)
         delete savedUser.password
 
         const striper = new Striper()
         striper.createCustomer(email, user.name).then(stripeUserId => {
-            userSQL.updateStripeUserId(savedUser.id, stripeUserId)
+            SQL.User.updateStripeUserId(savedUser.id, stripeUserId)
         })
 
         return savedUser
@@ -36,8 +34,7 @@ export const mutations: Types.MutationResolvers = {
         const email = args.email
         const password = args.password
 
-        const userSQL = new UserSQL()
-        const result = await userSQL.login(email, password)
+        const result = await SQL.User.login(email, password)
         const rowCount = result.rows.length
         if (rowCount > 1) {
             console.log("Found 2 accounts with same email")
@@ -103,8 +100,7 @@ async function createStripeAccountIfNeeded(
 ): Promise<string> {
     const striper = new Striper()
     return striper.createCustomer(email, name).then(stripeUserId => {
-        const userSQL = new UserSQL()
-        userSQL.updateStripeUserId(id, stripeUserId)
+        SQL.User.updateStripeUserId(id, stripeUserId)
         return stripeUserId
     })
 }
