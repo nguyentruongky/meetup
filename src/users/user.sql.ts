@@ -2,7 +2,7 @@ import * as Types from "../resolvers-types"
 import { runQuery } from "../db/connection"
 import bcrypt from "bcrypt"
 import * as Builder from "../utils/builder"
-import { esc } from "../utils/utils"
+import * as Utility from "../utils/utils"
 
 export default class UserSQL {
     async register(user: Types.MUser) {
@@ -22,14 +22,14 @@ export default class UserSQL {
 
     async login(email: string, password: string) {
         const query = `
-        select * from users where email = ${esc(email)}
+        select * from users where email = ${Utility.esc(email)}
         `
         const result = await runQuery(query)
         return result
     }
 
     async checkEmailExist(email: string) {
-        const query = `select COUNT(email) > 0 exist from users where email = ${esc(
+        const query = `select COUNT(email) > 0 exist from users where email = ${Utility.esc(
             email
         )}`
         const result = await runQuery(query)
@@ -38,7 +38,7 @@ export default class UserSQL {
 
     async getUserByToken(token: string) {
         const query = `
-        select * from users where token = ${esc(token)}
+        select * from users where token = ${Utility.esc(token)}
         `
         const result = await runQuery(query)
 
@@ -56,15 +56,15 @@ export default class UserSQL {
 
     async updateStripeUserId(userId: string, stripeUserId: String) {
         const query = `
-        update users set "stripeUserId"=${esc(stripeUserId)} where id = ${esc(
-            userId
-        )}
+        update users set "stripeUserId"=${esc(
+            stripeUserId
+        )} where id = ${Utility.esc(userId)}
         `
         runQuery(query)
     }
 
     async getJoinedClubs(userId: string) {
-        const query = `select * from "usersClubs", "clubs" where "userId" = ${esc(
+        const query = `select * from "usersClubs", "clubs" where "userId" = ${Utility.esc(
             userId
         )} and "clubId" = "clubs".id`
         const result = await runQuery(query)

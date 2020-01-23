@@ -1,5 +1,5 @@
 import { runQuery } from "../db/connection"
-import { esc, escRaw, escapeObject } from "../utils/utils"
+import * as Utility from "../utils/utils"
 import * as Types from "../resolvers-types"
 
 export default class ClubSQL {
@@ -25,7 +25,7 @@ export default class ClubSQL {
             createdAt: Date.now()
         }
         let query = `insert into clubs (%1) values (%2)`
-        const insertValue = escapeObject(dict)
+        const insertValue = Utility.escapeObject(dict)
         query = query.replace("%1", insertValue.key)
         query = query.replace("%2", insertValue.value)
 
@@ -46,7 +46,7 @@ export default class ClubSQL {
     }
 
     async searchByKeyword(keyword: string) {
-        const escKeyword = escRaw(keyword)
+        const escKeyword = Utility.escRaw(keyword)
         const query = `select * from clubs where title like '%${escKeyword}%' or description like '%${escKeyword}%'`
         const result = await runQuery(query)
         return result
@@ -67,7 +67,7 @@ export default class ClubSQL {
             joinedAt: Date.now()
         }
         let query = `insert into "usersClubs" (%1) values (%2)`
-        const insertValue = escapeObject(dict)
+        const insertValue = Utility.escapeObject(dict)
         query = query.replace("%1", insertValue.key)
         query = query.replace("%2", insertValue.value)
         const result = await runQuery(query)
@@ -75,15 +75,17 @@ export default class ClubSQL {
     }
 
     async quitClub(clubId: string, userId: String) {
-        const query = `delete from "usersClubs" where "clubId" = ${esc(
+        const query = `delete from "usersClubs" where "clubId" = ${Utility.esc(
             clubId
-        )} and "userId" = ${esc(userId)}`
+        )} and "userId" = ${Utility.esc(userId)}`
         const result = await runQuery(query)
         return result
     }
 
     async getHostIds(clubId: string) {
-        const query = `select "hostIds" from clubs where id = ${esc(clubId)}`
+        const query = `select "hostIds" from clubs where id = ${Utility.esc(
+            clubId
+        )}`
         const result = await runQuery(query)
         return result
     }
@@ -99,7 +101,7 @@ export default class ClubSQL {
             createdAt: Date.now()
         }
         let query = `insert into "clubFees" (%1) values (%2)`
-        const insertValue = escapeObject(dict)
+        const insertValue = Utility.escapeObject(dict)
         query = query.replace("%1", insertValue.key)
         query = query.replace("%2", insertValue.value)
         const result = await runQuery(query)
@@ -107,13 +109,17 @@ export default class ClubSQL {
     }
 
     async getFee(tierId: string) {
-        const query = `select * from "clubFees" where id = ${esc(tierId)}`
+        const query = `select * from "clubFees" where id = ${Utility.esc(
+            tierId
+        )}`
         const result = await runQuery(query)
         return result
     }
 
     async getFeesOfClub(clubId: string) {
-        const query = `select * from "clubFees" where "clubId" = ${esc(clubId)}`
+        const query = `select * from "clubFees" where "clubId" = ${Utility.esc(
+            clubId
+        )}`
         const result = await runQuery(query)
         return result
     }
@@ -128,7 +134,7 @@ export default class ClubSQL {
             userId: userId
         }
         let query = `insert into "enrollment" (%1) values (%2)`
-        const insertValue = escapeObject(params)
+        const insertValue = Utility.escapeObject(params)
         query = query.replace("%1", insertValue.key)
         query = query.replace("%2", insertValue.value)
         const result = await runQuery(query)
@@ -136,25 +142,25 @@ export default class ClubSQL {
     }
 
     async setFavorite(clubId: string, userId: string) {
-        const checkFavoriteQuery = `select count("userId") in "favoriteClubs  where "userId" = ${esc(
+        const checkFavoriteQuery = `select count("userId") in "favoriteClubs  where "userId" = ${Utility.esc(
             userId
-        )} and "clubId" = ${esc(clubId)}"`
+        )} and "clubId" = ${Utility.esc(clubId)}"`
         const result = await runQuery(checkFavoriteQuery)
         if (result.count === 0) {
             const params: any = {
                 clubId: clubId,
                 userId: userId
             }
-            const insertValue = escapeObject(params)
+            const insertValue = Utility.escapeObject(params)
             let query = `insert into "favoriteClubs" (%1) values (%2)`
             query = query.replace("%1", insertValue.key)
             query = query.replace("%2", insertValue.value)
             runQuery(query)
             return true
         } else {
-            const query = `delete from "favoriteClubs" where "userId" = ${esc(
+            const query = `delete from "favoriteClubs" where "userId" = ${Utility.esc(
                 userId
-            )} and "clubId" = ${esc(clubId)}`
+            )} and "clubId" = ${Utility.esc(clubId)}`
             runQuery(query)
             return false
         }

@@ -1,6 +1,6 @@
 import * as Types from "../resolvers-types"
 import * as Builder from "../utils/builder"
-import UUID from "../utils/uuid"
+import * as Utility from "../utils/utils"
 import jwt from "jwt-simple"
 import Stripe from "stripe"
 
@@ -11,7 +11,7 @@ export class MClubBuilder {
             return
         }
         if (raw.id === undefined) {
-            instance.id = UUID.generate()
+            instance.id = Utility.uuid()
         } else {
             instance.id = raw.id
         }
@@ -28,7 +28,7 @@ export class MClubBuilder {
 
     static createFromInput(input: Types.CreateClubInput): Types.MClub {
         const club: Types.MClub = new Types.MClub()
-        club.id = UUID.generate()
+        club.id = Utility.uuid()
         club.title = input.title
         if (input.host !== undefined) {
             club.host = input.host.map(id => {
@@ -60,7 +60,7 @@ export class ClubAttendanceResultBuilder {
 export class FeeBuilder {
     static create(raw: Types.FeeInput): Types.Fee {
         const fee = new Types.Fee()
-        fee.id = UUID.generate()
+        fee.id = Utility.uuid()
         fee.amount = raw.amount
         fee.clubId = raw.clubId
         fee.currency = raw.currency
