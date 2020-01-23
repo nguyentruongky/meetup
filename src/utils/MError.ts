@@ -16,8 +16,8 @@ export const Internal = new Error(Type.INTERNAL_SERVER_ERROR.toString())
 export const Forbidden = new Error(Type.FORBIDDEN.toString())
 export const EmailExists = new Error(Type.EMAIL_EXIST.toString())
 export function create(type: Type, message: string) {
-    const err = new Error(message)
-    err.name = type.toString()
+    const err = new Error(type.toString())
+    err.name = message
     return err
 }
 
