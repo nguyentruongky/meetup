@@ -22,9 +22,14 @@ export const queries: QueryResolvers = {
         delete user.password
 
         const stripeUserId = user.stripeUserId
-        const striper = new Striper()
-        const cards = await striper.cardList(stripeUserId)        
-        user.cards = cards
+        if (stripeUserId) {
+            const striper = new Striper()
+            const cards = await striper.cardList(stripeUserId)        
+            user.cards = cards
+        } else {
+            user.cards = []
+        }
+        
 
         const sql = new UserSQL()
         const clubs = await sql.getJoinedClubs(user.id)
