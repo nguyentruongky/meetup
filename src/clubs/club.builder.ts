@@ -41,6 +41,10 @@ export class MClubBuilder {
         club.slotCount = input.slotCount
         club.frequency = input.frequency
         club.coverImageUrl = input.coverImageUrl
+        if (input.fee) {
+            const fee = FeeBuilder.create(input.fee)
+            club.fee = fee
+        }
         return club
     }
 }
@@ -63,7 +67,11 @@ export class FeeBuilder {
         fee.id = Utility.uuid()
         fee.amount = raw.amount
         fee.clubId = raw.clubId
-        fee.currency = raw.currency
+        if (raw.currency) {
+            fee.currency = raw.currency
+        } else {
+            fee.currency = "USD"
+        }
         fee.tierId = raw.tierId
         fee.tierDescription = raw.tierDescription
         return fee

@@ -33,7 +33,7 @@ export const formatError = new FormatError([
         statusCode: 403
     },
     {
-        name: "ServerError",
+        name: Type.INTERNAL_SERVER_ERROR,
         message: "Internal server error",
         statusCode: 500
     },

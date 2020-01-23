@@ -24,6 +24,7 @@ input CreateClubInput {
     location: MLocationInput!
     slotCount: Float!
     frequency: Frequency!
+    fee: FeeInput
     coverImageUrl: String
 }
 
@@ -75,9 +76,12 @@ type Fee {
 }
 
 input FeeInput {
-    clubId: String!
+    """Leave clubId null while create new club"""
+    clubId: String
     amount: Float!
+    """Default is USD"""
     currency: String!
+    """Descriptive name to remember yourself. For instance: 3mon, 1yr"""
     tierId: String
     tierDescription: String
 }

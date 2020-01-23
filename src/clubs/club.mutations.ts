@@ -3,6 +3,7 @@ import * as Builder from "../utils/builder"
 import * as SQL from "../utils/sql"
 import StripeHelper from "../utils/stripeHelper"
 import * as MError from "../utils/MError"
+import { addFee } from "./club.sql"
 export const mutations: Types.MutationResolvers = {
     club: (root, args, ctx) => {
         const creator: Types.MUser = ctx.user
@@ -44,12 +45,18 @@ export const mutations: Types.MutationResolvers = {
         }
 
         let host: Types.MUser[] = [creator]
-        if (club.host !== undefined) {
+        if (club.host) {
             club.host.push(creator)
             host = club.host
         }
         club.host = host
         const newClub = SQL.Club.create(club)
+
+        if (club.fee) {
+            club.fee.clubId = club.id
+            addFee(club.fee)
+        }
+
         return newClub
     },
 
@@ -85,13 +92,16 @@ export const mutations: Types.MutationResolvers = {
     addFee: async (root, args, ctx): Promise<Types.Fee> => {
         const user: Types.MUser = ctx.user
         if (user == undefined) {
-            throw new Error("You don't have permission to add fee")
+            throw MError.Unauthorized
         }
 
         const clubId = args.fee.clubId
+        if (!clubId) {
+            throw MError.create(MError.Type.BAD_REQUEST, "No clubId provided")
+        }
         const isOwner = await checkClubOwner(clubId, user.id)
         if (isOwner == false) {
-            throw new Error("You don't have permission to add fee")
+            throw MError.Forbidden
         }
 
         const fee = Builder.Club.FeeBuilder.create(args.fee)

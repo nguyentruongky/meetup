@@ -39,6 +39,7 @@ export class CreateClubInput {
   location: MLocationInput;
   slotCount: Scalars['Float'];
   frequency: Frequency;
+  fee?: Maybe<FeeInput>;
   coverImageUrl?: Maybe<Scalars['String']>;
 };
 
@@ -67,9 +68,12 @@ export class Fee {
 };
 
 export class FeeInput {
-  clubId: Scalars['String'];
+  /** Leave clubId null while create new club */
+  clubId?: Maybe<Scalars['String']>;
   amount: Scalars['Float'];
+  /** Default is USD */
   currency: Scalars['String'];
+  /** Descriptive name to remember yourself. For instance: 3mon, 1yr */
   tierId?: Maybe<Scalars['String']>;
   tierDescription?: Maybe<Scalars['String']>;
 };
