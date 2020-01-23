@@ -72,3 +72,26 @@ export const getJoinedClubs = async (userId: string) => {
     const result = await runQuery(query)
     return result
 }
+
+export const patchUser = async (userId: string, values: any) => {
+    Utility.clean(values)
+    let updateValues: string[] = []
+    for (const key in values) {
+        const element = values[key]
+        updateValues.push(`${key} = ${Utility.esc(element)}`)
+    }
+    if (updateValues.length == 0) {
+        return
+    }
+    const updateString = updateValues.join(", ")
+
+    let query = `update users set ${updateString} where "id" = ${Utility.esc(
+        userId
+    )}`
+    const result = await runQuery(query)
+
+    query = `select * from users where id = ${Utility.esc(userId)}`
+    const newResult = await runQuery(query)
+    const user = Builder.User.MUserBuilder.create(newResult.rows[0])
+    return user
+}

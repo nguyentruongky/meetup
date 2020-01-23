@@ -155,6 +155,7 @@ export class Mutation {
   favorite?: Maybe<Scalars['Boolean']>;
   joinClub: ClubAttendanceResult;
   login?: Maybe<MUser>;
+  patchUser?: Maybe<Profile>;
   quitClub: ClubAttendanceResult;
   register: MUser;
 };
@@ -199,6 +200,11 @@ export type MutationLoginArgs = {
 };
 
 
+export type MutationPatchUserArgs = {
+  input: PatchUserInput
+};
+
+
 export type MutationQuitClubArgs = {
   clubId: Scalars['String']
 };
@@ -208,6 +214,13 @@ export type MutationRegisterArgs = {
   email: Scalars['String'],
   password: Scalars['String'],
   name: Scalars['String']
+};
+
+export class PatchUserInput {
+  name?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  avatar?: Maybe<Scalars['String']>;
+  introduction?: Maybe<Scalars['String']>;
 };
 
 export class Profile {
@@ -333,6 +346,7 @@ export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
   ClubAttendanceResult: ResolverTypeWrapper<ClubAttendanceResult>,
   ClubAttendanceStatus: ClubAttendanceStatus,
+  PatchUserInput: PatchUserInput,
   EnrollInput: EnrollInput,
   EnrollOutput: ResolverTypeWrapper<EnrollOutput>,
 };
@@ -359,6 +373,7 @@ export type ResolversParentTypes = {
   Boolean: Scalars['Boolean'],
   ClubAttendanceResult: ClubAttendanceResult,
   ClubAttendanceStatus: ClubAttendanceStatus,
+  PatchUserInput: PatchUserInput,
   EnrollInput: EnrollInput,
   EnrollOutput: EnrollOutput,
 };
@@ -444,6 +459,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   favorite?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationFavoriteArgs, 'clubId'>>,
   joinClub?: Resolver<ResolversTypes['ClubAttendanceResult'], ParentType, ContextType, RequireFields<MutationJoinClubArgs, 'clubId'>>,
   login?: Resolver<Maybe<ResolversTypes['MUser']>, ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>,
+  patchUser?: Resolver<Maybe<ResolversTypes['Profile']>, ParentType, ContextType, RequireFields<MutationPatchUserArgs, 'input'>>,
   quitClub?: Resolver<ResolversTypes['ClubAttendanceResult'], ParentType, ContextType, RequireFields<MutationQuitClubArgs, 'clubId'>>,
   register?: Resolver<ResolversTypes['MUser'], ParentType, ContextType, RequireFields<MutationRegisterArgs, 'email' | 'password' | 'name'>>,
 };

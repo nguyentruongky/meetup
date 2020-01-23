@@ -18,15 +18,17 @@ export const queries: Types.QueryResolvers = {
         if (user == undefined) {
             throw MError.Unauthorized
         }
-        delete user.password
-
-        const cards = await getCards(user)
-        user.cards = cards
-
-        const clubs = await SQL.User.getJoinedClubs(user.id)
-        user.clubs = clubs.rows
-        return Builder.User.ProfileBuilder.create(user)
+        return getMe(user)
     }
+}
+
+export async function getMe(user: Types.MUser): Promise<Types.Profile> {
+    const cards = await getCards(user)
+    user.cards = cards
+
+    const clubs = await SQL.User.getJoinedClubs(user.id)
+    user.clubs = clubs.rows
+    return Builder.User.ProfileBuilder.create(user)
 }
 
 async function getCards(user: Types.MUser): Promise<Types.Card[]> {

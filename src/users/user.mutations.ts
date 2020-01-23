@@ -5,6 +5,7 @@ import StripeHelper from "../utils/stripeHelper"
 import * as Types from "../resolvers-types"
 import * as Builder from "../utils/builder"
 import * as MError from "../utils/MError"
+import { getMe } from "./user.queries"
 
 export const mutations: Types.MutationResolvers = {
     register: async (root, args, ctx) => {
@@ -98,6 +99,15 @@ export const mutations: Types.MutationResolvers = {
             args.token
         )
         return cardId
+    },
+    patchUser: async (root, args, ctx) => {
+        const user: Types.MUser = ctx.user
+        if (user == undefined) {
+            throw MError.Unauthorized
+        }
+        let newValues = args.input
+        const updatedUser = await SQL.User.patchUser(user.id, newValues)
+        return getMe(updatedUser)
     }
 }
 
