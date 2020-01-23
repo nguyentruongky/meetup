@@ -1,7 +1,7 @@
 import * as Types from "../resolvers-types"
-import * as SQL from "../utils/SQL"
+import * as SQL from "../utils/sql"
 import * as Builder from "../utils/builder"
-import Striper from "../utils/striper"
+import StripeHelper from "../utils/stripeHelper"
 import * as MError from "../utils/MError"
 
 export const queries: Types.QueryResolvers = {
@@ -11,7 +11,7 @@ export const queries: Types.QueryResolvers = {
             throw MError.Unauthorized
         }
         const stripeUserId = user.stripeUserId
-        const striper = new Striper()
+        const striper = new StripeHelper()
         return striper.cardList(stripeUserId)
     },
 
@@ -24,7 +24,7 @@ export const queries: Types.QueryResolvers = {
 
         const stripeUserId = user.stripeUserId
         if (stripeUserId) {
-            const striper = new Striper()
+            const striper = new StripeHelper()
             const cards = await striper.cardList(stripeUserId)
             user.cards = cards
         } else {

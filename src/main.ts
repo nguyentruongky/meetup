@@ -2,7 +2,7 @@ import { ApolloServer } from "apollo-server"
 
 import { mainResolvers as resolvers } from "./resolvers/index"
 import { schema } from "../schema"
-import * as SQL from "./utils/SQL"
+import * as SQL from "./utils/sql"
 import MContext from "./models/mcontext"
 
 import { formatError } from "./utils/MError"

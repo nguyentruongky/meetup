@@ -1,7 +1,7 @@
 import * as Types from "../resolvers-types"
 import * as Builder from "../utils/builder"
-import * as SQL from "../utils/SQL"
-import Striper from "../utils/striper"
+import * as SQL from "../utils/sql"
+import StripeHelper from "../utils/stripeHelper"
 import * as MError from "../utils/MError"
 export const mutations: Types.MutationResolvers = {
     club: (root, args, ctx) => {
@@ -142,7 +142,7 @@ async function joinClubIfAvailable(clubId: string, user: Types.MUser) {
     }
 
     if (isFree == false) {
-        const striper = new Striper()
+        const striper = new StripeHelper()
         // check stripe account created
         let stripeUserId = user.stripeUserId
         if (stripeUserId === undefined) {
