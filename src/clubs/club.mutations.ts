@@ -28,7 +28,7 @@ export const mutations: Types.MutationResolvers = {
         if (club.time.endAt - club.time.startAt < 0) {
             errorMessage = "Invalid time"
         }
-        
+
         if (club.location.address === "") {
             errorMessage = "Where does the event happen?"
         }
@@ -40,7 +40,7 @@ export const mutations: Types.MutationResolvers = {
         }
 
         if (errorMessage !== "") {
-            throw MError.error(MError.Type.BAD_REQUEST, errorMessage)
+            throw MError.create(MError.Type.BAD_REQUEST, errorMessage)
         }
 
         let host: Types.MUser[] = [creator]
