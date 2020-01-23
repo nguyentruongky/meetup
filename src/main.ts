@@ -2,8 +2,7 @@ import { ApolloServer } from "apollo-server"
 
 import { mainResolvers as resolvers } from "./resolvers/index"
 import { schema } from "../schema"
-
-import UserSQL from "./users/user.sql"
+import * as SQL from "./utils/SQL"
 import MContext from "./models/mcontext"
 
 import { formatError } from "./utils/MError"
@@ -17,9 +16,7 @@ const server = new ApolloServer({
         if (token === undefined) {
             return undefined
         }
-
-        const sql = new UserSQL()
-        const user = await sql.getUserByToken(token)
+        const user = await SQL.User.getUserByToken(token)
         const ctx: MContext = {
             token,
             user,

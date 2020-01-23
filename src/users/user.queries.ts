@@ -1,5 +1,5 @@
 import * as Types from "../resolvers-types"
-import UserSQL from "./user.sql"
+import * as SQL from "../utils/SQL"
 import * as Builder from "../utils/builder"
 import Striper from "../utils/striper"
 import * as MError from "../utils/MError"
@@ -31,8 +31,7 @@ export const queries: Types.QueryResolvers = {
             user.cards = []
         }
 
-        const sql = new UserSQL()
-        const clubs = await sql.getJoinedClubs(user.id)
+        const clubs = await SQL.User.getJoinedClubs(user.id)
         user.clubs = clubs.rows
         return user
     }
