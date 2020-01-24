@@ -8,7 +8,6 @@ import { formatError } from "./utils/MError"
 const errorNames = formatError.errorName
 
 const server = new ApolloServer({
-    resolvers,
     context: async ({ req }) => {
         const token = req.headers.authorization
         if (token === undefined) {
