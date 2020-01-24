@@ -71,7 +71,7 @@ export class FeeInput {
   clubId?: Maybe<Scalars['String']>;
   amount: Scalars['Float'];
   /** Default is USD */
-  currency: Scalars['String'];
+  currency?: Maybe<Scalars['String']>;
   /** Descriptive name to remember yourself. For instance: 3mon, 1yr */
   tierId?: Maybe<Scalars['String']>;
   tierDescription?: Maybe<Scalars['String']>;
