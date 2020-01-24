@@ -129,6 +129,7 @@ export class MTimeInput {
   timeNotes?: Maybe<Scalars['String']>;
 };
 
+/** TYPE: Type Definition */
 export class MUser {
    __typename?: 'MUser';
   id?: Maybe<Scalars['String']>;
@@ -144,6 +145,7 @@ export class MUser {
   clubs?: Maybe<Array<Maybe<MClub>>>;
 };
 
+/** MUTATION */
 export class Mutation {
    __typename?: 'Mutation';
   addCard: Scalars['String'];
@@ -160,6 +162,7 @@ export class Mutation {
 };
 
 
+/** MUTATION */
 export type MutationAddCardArgs = {
   number: Scalars['String'],
   expMonth: Scalars['String'],
@@ -168,47 +171,56 @@ export type MutationAddCardArgs = {
 };
 
 
+/** MUTATION */
 export type MutationAddCardByTokenArgs = {
   token: Scalars['String']
 };
 
 
+/** MUTATION */
 export type MutationAddFeeArgs = {
   fee: FeeInput
 };
 
 
+/** MUTATION */
 export type MutationCreateClubArgs = {
   input?: Maybe<CreateClubInput>
 };
 
 
+/** MUTATION */
 export type MutationFavoriteArgs = {
   clubId: Scalars['String']
 };
 
 
+/** MUTATION */
 export type MutationJoinClubArgs = {
   clubId: Scalars['String']
 };
 
 
+/** MUTATION */
 export type MutationLoginArgs = {
   email: Scalars['String'],
   password: Scalars['String']
 };
 
 
+/** MUTATION */
 export type MutationPatchUserArgs = {
   input: PatchUserInput
 };
 
 
+/** MUTATION */
 export type MutationQuitClubArgs = {
   clubId: Scalars['String']
 };
 
 
+/** MUTATION */
 export type MutationRegisterArgs = {
   email: Scalars['String'],
   password: Scalars['String'],
@@ -216,10 +228,12 @@ export type MutationRegisterArgs = {
 };
 
 
+/** MUTATION */
 export type MutationResetPasswordArgs = {
   email: Scalars['String']
 };
 
+/** INPUT */
 export class PatchUserInput {
   name?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
@@ -240,6 +254,7 @@ export class Profile {
   clubs?: Maybe<Array<Maybe<MClub>>>;
 };
 
+/** QUERY */
 export class Query {
    __typename?: 'Query';
   cards: Array<Card>;
@@ -250,11 +265,13 @@ export class Query {
 };
 
 
+/** QUERY */
 export type QueryClubArgs = {
   id: Scalars['String']
 };
 
 
+/** QUERY */
 export type QuerySearchArgs = {
   keyword: Scalars['String']
 };

@@ -1,5 +1,13 @@
-import { schema as ClubSchema } from "./club.schema"
-import { schema as QueriesSchema } from "./queries.schema"
-import { schema as UserSchema } from "./user.schema"
+export let types: any[] = []
 
-export const types = [ClubSchema, QueriesSchema, UserSchema]
+const path = __dirname
+const fs = require("fs")
+
+fs.readdirSync(path).forEach(file => {
+    if (file.includes("schema") == true && file.includes("map") == false) {
+        const { schema } = require(path + "/" + file)
+        if (schema) {
+            types.push(schema)
+        }
+    }
+})
