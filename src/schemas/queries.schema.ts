@@ -12,6 +12,7 @@ export const schema = gql`
         ): String!
         addCardByToken(token: String!): String!
         patchUser(input: PatchUserInput!): MUser
+        resetPassword(email: String!): String
     }
 
     extend type Query {

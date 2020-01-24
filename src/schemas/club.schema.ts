@@ -82,7 +82,7 @@ export const schema = gql`
         """
         Default is USD
         """
-        currency: String!
+        currency: String
         """
         Descriptive name to remember yourself. For instance: 3mon, 1yr
         """
