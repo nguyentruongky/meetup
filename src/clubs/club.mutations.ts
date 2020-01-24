@@ -5,7 +5,7 @@ import StripeHelper from "../utils/stripeHelper"
 import * as MError from "../utils/MError"
 import { addFee } from "./club.sql"
 export const mutations: Types.MutationResolvers = {
-    club: (root, args, ctx) => {
+    createClub: (root, args, ctx) => {
         const creator: Types.MUser = ctx.user
         if (creator == undefined) {
             throw MError.Forbidden
@@ -20,16 +20,6 @@ export const mutations: Types.MutationResolvers = {
         if (club.description === "") {
             errorMessage = "Description is empty"
         }
-        if (club.time.startAt === 0) {
-            errorMessage = "When does the event start?"
-        }
-        if (club.time.endAt === 0) {
-            errorMessage = "When does the event end?"
-        }
-        if (club.time.endAt - club.time.startAt < 0) {
-            errorMessage = "Invalid time"
-        }
-
         if (club.location.address === "") {
             errorMessage = "Where does the event happen?"
         }

@@ -109,14 +109,14 @@ export const mutations: Types.MutationResolvers = {
         const updatedUser = await SQL.User.patchUser(user.id, newValues)
         return getMe(updatedUser)
     },
-    resetPassword: async (root, args, ctx) => {
-        const email = args.email
-        if (email === "") {
-            throw MError.create(MError.Type.BAD_REQUEST, "Email is required")
-        }
-        resetPassword(email)
-        return "Check your email for instruction"
-    }
+    // resetPassword: async (root, args, ctx) => {
+    //     const email = args.email
+    //     if (email === "") {
+    //         throw MError.create(MError.Type.BAD_REQUEST, "Email is required")
+    //     }
+    //     resetPassword(email)
+    //     return "Check your email for instruction"
+    // }
 }
 
 async function createStripeAccountIfNeeded(

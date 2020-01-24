@@ -12,13 +12,12 @@ DROP TABLE IF EXISTS "public"."clubs";
 -- This script only contains the table creation statements and does not fully represent the table in the database. It's still missing: indices, triggers. Do not use it as a backup.
 
 -- Table Definition
-CREATE TABLE "public"."clubs" (
+CREATE TABLE "public"."clubs"
+(
     "id" uuid NOT NULL,
     "title" varchar,
     "description" text,
     "hostIds" text,
-    "startAt" float8,
-    "endAt" float8,
     "lat" float4,
     "long" float4,
     "locationNotes" text,
