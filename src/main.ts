@@ -5,9 +5,15 @@ import * as SQL from "./utils/sql"
 import * as Models from "./utils/models"
 
 import { formatError } from "./utils/MError"
+import { schema as ClubSchema } from "./schemas/club.schema"
+import { schema as QueriesSchema } from "./schemas/queries.schema"
+import { schema as UserSchema } from "./schemas/user.schema"
+
 const errorNames = formatError.errorName
 
 const server = new ApolloServer({
+    resolvers: resolvers,
+    typeDefs: [ClubSchema, QueriesSchema, UserSchema],
     context: async ({ req }) => {
         const token = req.headers.authorization
         if (token === undefined) {

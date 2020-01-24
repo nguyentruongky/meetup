@@ -1,5 +1,5 @@
 overwrite: true
-schema: "./src/**/*.graphql"
+schema: "./src/**/*.schema.ts"
 documents: null
 generates:
     ./src/resolvers-types.ts:
