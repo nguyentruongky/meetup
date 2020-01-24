@@ -49,7 +49,7 @@ export const formatError = new FormatError([
     },
     {
         name: Type.FORBIDDEN,
-        message: "You don't have permission",
+        message: "Forbidden",
         statusCode: 403
     }
 ])

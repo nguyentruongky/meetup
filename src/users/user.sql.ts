@@ -88,7 +88,7 @@ export const patchUser = async (userId: string, values: any) => {
     let query = `update users set ${updateString} where "id" = ${Utility.esc(
         userId
     )}`
-    const result = await runQuery(query)
+    await runQuery(query)
 
     query = `select * from users where id = ${Utility.esc(userId)}`
     const newResult = await runQuery(query)
@@ -111,4 +111,36 @@ export const getUserByEmail = async (email: string) => {
         const newUser = Builder.User.MUserBuilder.create(raw)
         return newUser
     }
+}
+
+export const saveOTP = (userId: string, email: string, code: string) => {
+    const dict: any = {
+        userId: userId,
+        email,
+        code: code,
+        expiredAt: Date.now() + 5*60*1000
+    }
+    let query = `insert into "OTP" (%1) values (%2)`
+    const insertValue = Utility.escapeObject(dict)
+    query = query.replace("%1", insertValue.key)
+    query = query.replace("%2", insertValue.value)
+
+    runQuery(query)
+}
+
+export const getOTP = async (code: string, email: string) => {
+    const query = `select * from "OTP" where code = ${Utility.esc(code)} and email = ${Utility.esc(email)}`
+    const result = await runQuery(query)
+    return result
+}
+
+export const deleteOTP = (code: string, email: string) => {
+    const query = `delete from "OTP" where code = ${Utility.esc(code)} and email = ${Utility.esc(email)}`
+    runQuery(query)
+}
+
+export const updatePassword = async (userId: string, newPassword: string) => {
+    const query = `update users set password = '${newPassword}' where id = ${Utility.esc(userId)}`
+    const result = await runQuery(query)
+    return result
 }

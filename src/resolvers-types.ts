@@ -25,12 +25,14 @@ export class ClubAttendanceResult {
   errorMessage?: Maybe<Scalars['String']>;
 };
 
+/** ENUM */
 export enum ClubAttendanceStatus {
   Success = 'success',
   Fail = 'fail',
   NeedPaymentSource = 'needPaymentSource'
 }
 
+/** INPUT */
 export class CreateClubInput {
   title: Scalars['String'];
   host?: Maybe<Array<Maybe<Scalars['String']>>>;
@@ -84,6 +86,7 @@ export enum Frequency {
   Monthly = 'monthly'
 }
 
+/** TYPE */
 export class MClub {
    __typename?: 'MClub';
   id: Scalars['String'];
@@ -155,6 +158,7 @@ export class Mutation {
   favorite?: Maybe<Scalars['Boolean']>;
   joinClub: ClubAttendanceResult;
   login?: Maybe<MUser>;
+  newPassword?: Maybe<Scalars['String']>;
   patchUser?: Maybe<MUser>;
   quitClub: ClubAttendanceResult;
   register: MUser;
@@ -203,6 +207,14 @@ export type MutationJoinClubArgs = {
 
 /** MUTATION */
 export type MutationLoginArgs = {
+  email: Scalars['String'],
+  password: Scalars['String']
+};
+
+
+/** MUTATION */
+export type MutationNewPasswordArgs = {
+  code: Scalars['String'],
   email: Scalars['String'],
   password: Scalars['String']
 };
@@ -479,6 +491,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   favorite?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationFavoriteArgs, 'clubId'>>,
   joinClub?: Resolver<ResolversTypes['ClubAttendanceResult'], ParentType, ContextType, RequireFields<MutationJoinClubArgs, 'clubId'>>,
   login?: Resolver<Maybe<ResolversTypes['MUser']>, ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>,
+  newPassword?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationNewPasswordArgs, 'code' | 'email' | 'password'>>,
   patchUser?: Resolver<Maybe<ResolversTypes['MUser']>, ParentType, ContextType, RequireFields<MutationPatchUserArgs, 'input'>>,
   quitClub?: Resolver<ResolversTypes['ClubAttendanceResult'], ParentType, ContextType, RequireFields<MutationQuitClubArgs, 'clubId'>>,
   register?: Resolver<ResolversTypes['MUser'], ParentType, ContextType, RequireFields<MutationRegisterArgs, 'email' | 'password' | 'name'>>,

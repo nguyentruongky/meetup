@@ -1,4 +1,5 @@
 import * as SQL from "../utils/sql"
+import { getOTP } from "../utils/utils"
 import bcrypt from "bcrypt"
 const saltRound = 10
 import StripeHelper from "../utils/stripeHelper"
@@ -115,8 +116,40 @@ export const mutations: Types.MutationResolvers = {
         if (email === "") {
             throw MError.create(MError.Type.BAD_REQUEST, "Email is required")
         }
-        resetPassword(email)
+        const user = await SQL.User.getUserByEmail(email)
+        if (user) {
+            const code = getOTP()
+            SQL.User.saveOTP(user.id, email, code)
+            const sender = new ResetPasswordMail(email, code)
+            sender.send()
+        }
+
         return "Check your email for instruction"
+    },
+    newPassword: async (root, args, ctx) => {
+        const { code, email, password } = args
+        if (code.length === 0 || email.length === 0 || password.length === 0) {
+            throw MError.BadRequest
+        }
+        const result: any[] = (await SQL.User.getOTP(code, email)).rows
+        SQL.User.deleteOTP(code, email)
+
+        if (result.length === 0) {
+            throw MError.BadRequest
+        }
+        const expiredAt: number = result[0].expiredAt
+        if (Date.now() > expiredAt) {
+            throw MError.create(MError.Type.FORBIDDEN, "Expired")
+        }
+
+        const pw = bcrypt.hashSync(password, saltRound)
+        const updateResult = await SQL.User.updatePassword(result[0].userId, pw)
+        
+        if (updateResult.rowCount === 1) { 
+            return "Successfully reset"
+        } else {
+            throw MError.Internal
+        }
     }
 }
 
@@ -129,14 +162,4 @@ async function createStripeAccountIfNeeded(
     const stripeUserId = await striper.createCustomer(email, name)
     SQL.User.updateStripeUserId(id, stripeUserId)
     return stripeUserId
-}
-async function resetPassword(email: string) {
-    const user = await SQL.User.getUserByEmail(email)
-    if (!user) {
-        return
-    }
-
-    const code = "123456"
-    const sender = new ResetPasswordMail(email, code)
-    sender.send()
 }

@@ -63,5 +63,6 @@ export const schema = gql`
         addCardByToken(token: String!): String!
         patchUser(input: PatchUserInput!): MUser
         resetPassword(email: String!): String
+        newPassword(code: String!, email: String!, password: String!): String
     }
 `
