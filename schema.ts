@@ -7,7 +7,6 @@ export const schema = gql`
         host: [MUser]!
         description: String!
         attendees: [MUser]
-        time: MTime!
         location: MLocation!
         slotCount: Int
         createdAt: Float
@@ -20,7 +19,6 @@ export const schema = gql`
         title: String!
         host: [String]
         description: String!
-        time: MTimeInput!
         location: MLocationInput!
         slotCount: Float!
         frequency: Frequency!
@@ -35,7 +33,7 @@ export const schema = gql`
     }
 
     type Mutation {
-        club(input: CreateClubInput): MClub!
+        createClub(input: CreateClubInput): MClub!
         joinClub(clubId: String!): ClubAttendanceResult!
         quitClub(clubId: String!): ClubAttendanceResult!
         addFee(fee: FeeInput!): Fee

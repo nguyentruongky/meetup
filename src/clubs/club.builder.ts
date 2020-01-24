@@ -18,7 +18,6 @@ export class MClubBuilder {
         instance.title = raw.title
         instance.host = raw.host
         instance.description = raw.description
-        instance.time = Builder.User.MTimeBuilder.create(raw)
         instance.location = Builder.User.MLocationBuilder.create(raw)
         instance.slotCount = raw.slotCount
         instance.frequency = raw.frequency
@@ -36,7 +35,6 @@ export class MClubBuilder {
             })
         }
         club.description = input.description
-        club.time = input.time
         club.location = input.location
         club.slotCount = input.slotCount
         club.frequency = input.frequency

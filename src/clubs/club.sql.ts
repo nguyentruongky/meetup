@@ -13,8 +13,6 @@ export const create = async (event: Types.MClub) => {
         title: event.title,
         description: event.description,
         hostIds: hostIdString,
-        startAt: event.time.startAt,
-        endAt: event.time.endAt,
         lat: event.location.lat,
         long: event.location.long,
         locationNotes: event.location.locationNotes,
