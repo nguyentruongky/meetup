@@ -344,9 +344,9 @@ export type ResolversTypes = {
   PatchUserInput: PatchUserInput,
   EnrollInput: EnrollInput,
   EnrollOutput: ResolverTypeWrapper<EnrollOutput>,
-  Profile: ResolverTypeWrapper<Profile>,
   MTime: ResolverTypeWrapper<MTime>,
   MTimeInput: MTimeInput,
+  Profile: ResolverTypeWrapper<Profile>,
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -371,9 +371,9 @@ export type ResolversParentTypes = {
   PatchUserInput: PatchUserInput,
   EnrollInput: EnrollInput,
   EnrollOutput: EnrollOutput,
-  Profile: Profile,
   MTime: MTime,
   MTimeInput: MTimeInput,
+  Profile: Profile,
 };
 
 export type CardResolvers<ContextType = any, ParentType extends ResolversParentTypes['Card'] = ResolversParentTypes['Card']> = {

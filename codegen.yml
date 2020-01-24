@@ -1,12 +1,12 @@
 overwrite: true
-schema: "./schema.ts"
+schema: "./src/**/*.graphql"
 documents: null
 generates:
-  ./src/resolvers-types.ts:
-    config:
-      declarationKind: 
-        type: 'class'
-        input: 'class'
-    plugins:
-      - typescript
-      - typescript-resolvers
+    ./src/resolvers-types.ts:
+        config:
+            declarationKind:
+                type: "class"
+                input: "class"
+        plugins:
+            - typescript
+            - typescript-resolvers
