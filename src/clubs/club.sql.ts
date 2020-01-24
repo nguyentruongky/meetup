@@ -48,12 +48,17 @@ export const getFees = async () => {
     return result
 }
 
+export const getFeeByClubId = async (clubId) => {
+    const query = `
+        select * from "clubFees" where "clubId" = ${Utility.esc(clubId)}
+    `
+    const result = await runQuery(query)
+    return result
+}
+
 export const getClub = async (id: string) => {
     const query = `
-    select "clubFees".id as "feeId", "clubFees".amount, "clubFees".currency, "clubFees"."tierId", "clubFees"."tierDescription", 
-    clubs.* 
-    from "clubFees", clubs 
-    where clubs.id = '${id}' and "clubId" = "clubFees".id
+    select * from clubs where id = ${Utility.esc(id)}
     `
     const result = await runQuery(query)
     return result
