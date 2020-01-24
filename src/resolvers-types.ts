@@ -156,6 +156,7 @@ export class Mutation {
   patchUser?: Maybe<MUser>;
   quitClub: ClubAttendanceResult;
   register: MUser;
+  resetPassword?: Maybe<Scalars['String']>;
 };
 
 
@@ -212,6 +213,11 @@ export type MutationRegisterArgs = {
   email: Scalars['String'],
   password: Scalars['String'],
   name: Scalars['String']
+};
+
+
+export type MutationResetPasswordArgs = {
+  email: Scalars['String']
 };
 
 export class PatchUserInput {
@@ -459,6 +465,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   patchUser?: Resolver<Maybe<ResolversTypes['MUser']>, ParentType, ContextType, RequireFields<MutationPatchUserArgs, 'input'>>,
   quitClub?: Resolver<ResolversTypes['ClubAttendanceResult'], ParentType, ContextType, RequireFields<MutationQuitClubArgs, 'clubId'>>,
   register?: Resolver<ResolversTypes['MUser'], ParentType, ContextType, RequireFields<MutationRegisterArgs, 'email' | 'password' | 'name'>>,
+  resetPassword?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationResetPasswordArgs, 'email'>>,
 };
 
 export type ProfileResolvers<ContextType = any, ParentType extends ResolversParentTypes['Profile'] = ResolversParentTypes['Profile']> = {

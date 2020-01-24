@@ -6,6 +6,7 @@ import * as Types from "../resolvers-types"
 import * as Builder from "../utils/builder"
 import * as MError from "../utils/MError"
 import { getMe } from "./user.queries"
+import { ResetPasswordMail } from "../utils/EmailSender"
 
 export const mutations: Types.MutationResolvers = {
     register: async (root, args, ctx) => {
@@ -109,14 +110,14 @@ export const mutations: Types.MutationResolvers = {
         const updatedUser = await SQL.User.patchUser(user.id, newValues)
         return getMe(updatedUser)
     },
-    // resetPassword: async (root, args, ctx) => {
-    //     const email = args.email
-    //     if (email === "") {
-    //         throw MError.create(MError.Type.BAD_REQUEST, "Email is required")
-    //     }
-    //     resetPassword(email)
-    //     return "Check your email for instruction"
-    // }
+    resetPassword: async (root, args, ctx) => {
+        const email = args.email
+        if (email === "") {
+            throw MError.create(MError.Type.BAD_REQUEST, "Email is required")
+        }
+        resetPassword(email)
+        return "Check your email for instruction"
+    }
 }
 
 async function createStripeAccountIfNeeded(
@@ -135,5 +136,7 @@ async function resetPassword(email: string) {
         return
     }
 
-    
+    const code = "123456"
+    const sender = new ResetPasswordMail(email, code)
+    sender.send()
 }

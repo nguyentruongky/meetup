@@ -40,14 +40,14 @@ export const mutations: Types.MutationResolvers = {
             host = club.host
         }
         club.host = host
-        const newClub = SQL.Club.create(club)
+        SQL.Club.create(club)
 
         if (club.fee) {
             club.fee.clubId = club.id
             addFee(club.fee)
         }
 
-        return newClub
+        return club
     },
 
     joinClub: (root, args, ctx): Promise<Types.ClubAttendanceResult> => {

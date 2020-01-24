@@ -1,4 +1,5 @@
 import { ApolloServer } from "apollo-server"
+require("dotenv").config()
 
 import { mainResolvers as resolvers } from "./resolvers/index"
 import { schema } from "../schema"
