@@ -1,6 +1,5 @@
 import { ApolloServer } from "apollo-server"
 
-import { mainResolvers as resolvers } from "./resolvers/index"
 import * as SQL from "./utils/sql"
 import * as Models from "./utils/models"
 
