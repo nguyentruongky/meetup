@@ -155,7 +155,7 @@ export class Mutation {
   favorite?: Maybe<Scalars['Boolean']>;
   joinClub: ClubAttendanceResult;
   login?: Maybe<MUser>;
-  patchUser?: Maybe<Profile>;
+  patchUser?: Maybe<MUser>;
   quitClub: ClubAttendanceResult;
   register: MUser;
 };
@@ -241,7 +241,7 @@ export class Query {
   cards: Array<Card>;
   club?: Maybe<MClub>;
   clubs?: Maybe<Array<MClub>>;
-  me: Profile;
+  me: MUser;
   search?: Maybe<Array<MClub>>;
 };
 
@@ -337,7 +337,6 @@ export type ResolversTypes = {
   MLocation: ResolverTypeWrapper<MLocation>,
   Frequency: Frequency,
   Fee: ResolverTypeWrapper<Fee>,
-  Profile: ResolverTypeWrapper<Profile>,
   Mutation: ResolverTypeWrapper<{}>,
   FeeInput: FeeInput,
   CreateClubInput: CreateClubInput,
@@ -349,6 +348,7 @@ export type ResolversTypes = {
   PatchUserInput: PatchUserInput,
   EnrollInput: EnrollInput,
   EnrollOutput: ResolverTypeWrapper<EnrollOutput>,
+  Profile: ResolverTypeWrapper<Profile>,
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -364,7 +364,6 @@ export type ResolversParentTypes = {
   MLocation: MLocation,
   Frequency: Frequency,
   Fee: Fee,
-  Profile: Profile,
   Mutation: {},
   FeeInput: FeeInput,
   CreateClubInput: CreateClubInput,
@@ -376,6 +375,7 @@ export type ResolversParentTypes = {
   PatchUserInput: PatchUserInput,
   EnrollInput: EnrollInput,
   EnrollOutput: EnrollOutput,
+  Profile: Profile,
 };
 
 export type CardResolvers<ContextType = any, ParentType extends ResolversParentTypes['Card'] = ResolversParentTypes['Card']> = {
@@ -459,7 +459,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   favorite?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationFavoriteArgs, 'clubId'>>,
   joinClub?: Resolver<ResolversTypes['ClubAttendanceResult'], ParentType, ContextType, RequireFields<MutationJoinClubArgs, 'clubId'>>,
   login?: Resolver<Maybe<ResolversTypes['MUser']>, ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>,
-  patchUser?: Resolver<Maybe<ResolversTypes['Profile']>, ParentType, ContextType, RequireFields<MutationPatchUserArgs, 'input'>>,
+  patchUser?: Resolver<Maybe<ResolversTypes['MUser']>, ParentType, ContextType, RequireFields<MutationPatchUserArgs, 'input'>>,
   quitClub?: Resolver<ResolversTypes['ClubAttendanceResult'], ParentType, ContextType, RequireFields<MutationQuitClubArgs, 'clubId'>>,
   register?: Resolver<ResolversTypes['MUser'], ParentType, ContextType, RequireFields<MutationRegisterArgs, 'email' | 'password' | 'name'>>,
 };
@@ -480,7 +480,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   cards?: Resolver<Array<ResolversTypes['Card']>, ParentType, ContextType>,
   club?: Resolver<Maybe<ResolversTypes['MClub']>, ParentType, ContextType, RequireFields<QueryClubArgs, 'id'>>,
   clubs?: Resolver<Maybe<Array<ResolversTypes['MClub']>>, ParentType, ContextType>,
-  me?: Resolver<ResolversTypes['Profile'], ParentType, ContextType>,
+  me?: Resolver<ResolversTypes['MUser'], ParentType, ContextType>,
   search?: Resolver<Maybe<Array<ResolversTypes['MClub']>>, ParentType, ContextType, RequireFields<QuerySearchArgs, 'keyword'>>,
 };
 

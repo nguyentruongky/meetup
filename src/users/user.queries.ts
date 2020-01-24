@@ -22,13 +22,13 @@ export const queries: Types.QueryResolvers = {
     }
 }
 
-export async function getMe(user: Types.MUser): Promise<Types.Profile> {
+export async function getMe(user: Types.MUser): Promise<Types.MUser> {
     const cards = await getCards(user)
     user.cards = cards
 
     const clubs = await SQL.User.getJoinedClubs(user.id)
     user.clubs = clubs.rows
-    return Builder.User.ProfileBuilder.create(user)
+    return Builder.User.MUserBuilder.create(user)
 }
 
 async function getCards(user: Types.MUser): Promise<Types.Card[]> {
