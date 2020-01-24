@@ -108,6 +108,14 @@ export const mutations: Types.MutationResolvers = {
         let newValues = args.input
         const updatedUser = await SQL.User.patchUser(user.id, newValues)
         return getMe(updatedUser)
+    },
+    resetPassword: async (root, args, ctx) => {
+        const email = args.email
+        if (email === "") {
+            throw MError.create(MError.Type.BAD_REQUEST, "Email is required")
+        }
+        resetPassword(email)
+        return "Check your email for instruction"
     }
 }
 
@@ -120,4 +128,12 @@ async function createStripeAccountIfNeeded(
     const stripeUserId = await striper.createCustomer(email, name)
     SQL.User.updateStripeUserId(id, stripeUserId)
     return stripeUserId
+}
+async function resetPassword(email: string) {
+    const user = await SQL.User.getUserByEmail(email)
+    if (!user) {
+        return
+    }
+
+    
 }

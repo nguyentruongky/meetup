@@ -61,9 +61,9 @@ export class Fee {
    __typename?: 'Fee';
   id: Scalars['String'];
   clubId: Scalars['String'];
-  amount: Scalars['Float'];
-  currency: Scalars['String'];
-  tierId: Scalars['String'];
+  amount?: Maybe<Scalars['Float']>;
+  currency?: Maybe<Scalars['String']>;
+  tierId?: Maybe<Scalars['String']>;
   tierDescription?: Maybe<Scalars['String']>;
 };
 
@@ -158,6 +158,7 @@ export class Mutation {
   patchUser?: Maybe<Profile>;
   quitClub: ClubAttendanceResult;
   register: MUser;
+  resetPassword?: Maybe<Scalars['String']>;
 };
 
 
@@ -214,6 +215,11 @@ export type MutationRegisterArgs = {
   email: Scalars['String'],
   password: Scalars['String'],
   name: Scalars['String']
+};
+
+
+export type MutationResetPasswordArgs = {
+  email: Scalars['String']
 };
 
 export class PatchUserInput {
@@ -402,9 +408,9 @@ export type EnrollOutputResolvers<ContextType = any, ParentType extends Resolver
 export type FeeResolvers<ContextType = any, ParentType extends ResolversParentTypes['Fee'] = ResolversParentTypes['Fee']> = {
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   clubId?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
-  amount?: Resolver<ResolversTypes['Float'], ParentType, ContextType>,
-  currency?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
-  tierId?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  amount?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>,
+  currency?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  tierId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   tierDescription?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
 };
 
@@ -462,6 +468,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   patchUser?: Resolver<Maybe<ResolversTypes['Profile']>, ParentType, ContextType, RequireFields<MutationPatchUserArgs, 'input'>>,
   quitClub?: Resolver<ResolversTypes['ClubAttendanceResult'], ParentType, ContextType, RequireFields<MutationQuitClubArgs, 'clubId'>>,
   register?: Resolver<ResolversTypes['MUser'], ParentType, ContextType, RequireFields<MutationRegisterArgs, 'email' | 'password' | 'name'>>,
+  resetPassword?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationResetPasswordArgs, 'email'>>,
 };
 
 export type ProfileResolvers<ContextType = any, ParentType extends ResolversParentTypes['Profile'] = ResolversParentTypes['Profile']> = {

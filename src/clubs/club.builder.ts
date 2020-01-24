@@ -6,24 +6,24 @@ import Stripe from "stripe"
 
 export class MClubBuilder {
     static create(raw: any): Types.MClub {
-        const instance = new Types.MClub()
+        const club = new Types.MClub()
         if (Object.keys(raw).length === 0) {
             return
         }
         if (raw.id === undefined) {
-            instance.id = Utility.uuid()
+            club.id = Utility.uuid()
         } else {
-            instance.id = raw.id
+            club.id = raw.id
         }
-        instance.title = raw.title
-        instance.host = raw.host
-        instance.description = raw.description
-        instance.time = Builder.User.MTimeBuilder.create(raw)
-        instance.location = Builder.User.MLocationBuilder.create(raw)
-        instance.slotCount = raw.slotCount
-        instance.frequency = raw.frequency
-        instance.coverImageUrl = raw.coverImageUrl
-        return instance
+        club.title = raw.title
+        club.host = raw.host
+        club.description = raw.description
+        club.time = Builder.User.MTimeBuilder.create(raw)
+        club.location = Builder.User.MLocationBuilder.create(raw)
+        club.slotCount = raw.slotCount
+        club.frequency = raw.frequency
+        club.coverImageUrl = raw.coverImageUrl
+        return club
     }
 
     static createFromInput(input: Types.CreateClubInput): Types.MClub {
@@ -62,6 +62,20 @@ export class ClubAttendanceResultBuilder {
 }
 
 export class FeeBuilder {
+    static createFromSQL(raw: any): Types.Fee {
+        const fee = new Types.Fee()
+        fee.id = raw.id
+        fee.amount = raw.amount
+        fee.clubId = raw.clubId
+        if (raw.currency) {
+            fee.currency = raw.currency
+        } else {
+            fee.currency = "USD"
+        }
+        fee.tierId = raw.tierId
+        fee.tierDescription = raw.tierDescription
+        return fee
+    }
     static create(raw: Types.FeeInput): Types.Fee {
         const fee = new Types.Fee()
         fee.id = Utility.uuid()

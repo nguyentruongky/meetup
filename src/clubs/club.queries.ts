@@ -3,24 +3,41 @@ import * as Builder from "../utils/builder"
 import * as Types from "../resolvers-types"
 
 export const queries: Types.QueryResolvers = {
-    clubs: (root, args, ctx) => {
-        return SQL.Club.getClubs().then(result => {
-            const eventsRaw: any[] = result.rows
-            const events = eventsRaw.map(raw => {
-                return Builder.Club.MClubBuilder.create(raw)
-            })
-            return events
+    clubs: async (root, args, ctx) => {
+        const clubsRaw: any[] = (await SQL.Club.getClubs()).rows
+        let clubsDict = {}
+        clubsRaw.forEach(item => {
+            clubsDict[item.id] = Builder.Club.MClubBuilder.create(item)
         })
+
+        const feesRaw = (await SQL.Club.getFees()).rows
+        feesRaw.forEach(item => {
+            if (item.id) {
+                clubsDict[
+                    item.clubId
+                ].fee = Builder.Club.FeeBuilder.createFromSQL(item)
+            }
+        })
+        const clubs: Types.MClub[] = Object.values(clubsDict)
+        return clubs
     },
     club: (root, args, ctx) => {
         const eventId = args.id
         return SQL.Club.getClub(eventId).then(result => {
-            const eventsRaw: any[] = result.rows
-            if (eventsRaw.length === 0) {
-                return null
+            const clubsRaw: any[] = result.rows
+            const groupClubs: any = {}
+
+            const _clubs = clubsRaw.map(raw => {
+                return Builder.Club.MClubBuilder.create(raw)
+            })
+            _clubs.forEach(item => {
+                groupClubs[item.id] = item
+            })
+            const clubs: Types.MClub[] = Object.values(groupClubs)
+            if (clubs.length > 0) {
+                return clubs[0]
             } else {
-                const club = Builder.Club.MClubBuilder.create(eventsRaw[0])
-                return club
+                return null
             }
         })
     },

@@ -95,3 +95,20 @@ export const patchUser = async (userId: string, values: any) => {
     const user = Builder.User.MUserBuilder.create(newResult.rows[0])
     return user
 }
+export const getUserByEmail = async (email: string) => {
+    const query = `
+        select * from users where email = ${Utility.esc(email)}
+        `
+    const result = await runQuery(query)
+
+    const rowCount = result.rows.length
+    if (rowCount > 1) {
+        return null
+    } else if (rowCount == 0) {
+        return null
+    } else {
+        const raw = result.rows[0]
+        const newUser = Builder.User.MUserBuilder.create(raw)
+        return newUser
+    }
+}

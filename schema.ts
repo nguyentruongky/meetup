@@ -69,9 +69,9 @@ enum ClubAttendanceStatus {
 type Fee {
     id: String!
     clubId: String!
-    amount: Float!
-    currency: String!
-    tierId: String!
+    amount: Float
+    currency: String
+    tierId: String
     tierDescription: String
 }
 
@@ -125,6 +125,7 @@ extend type Mutation {
     addCard(number: String!, expMonth: String!, expYear: String!, cvc: String!): String!
     addCardByToken(token: String!): String!
     patchUser(input: PatchUserInput!): Profile
+    resetPassword(email: String!): String
 }
 
 extend type Query {

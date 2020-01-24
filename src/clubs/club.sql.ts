@@ -33,13 +33,28 @@ export const create = async (event: Types.MClub) => {
 }
 
 export const getClubs = async () => {
-    const query = `select * from clubs`
+    const query = `
+        select * from clubs
+    `
+    const result = await runQuery(query)
+    return result
+}
+
+export const getFees = async () => {
+    const query = `
+        select * from "clubFees"
+    `
     const result = await runQuery(query)
     return result
 }
 
 export const getClub = async (id: string) => {
-    const query = `select * from clubs where id = '${id}'`
+    const query = `
+    select "clubFees".id as "feeId", "clubFees".amount, "clubFees".currency, "clubFees"."tierId", "clubFees"."tierDescription", 
+    clubs.* 
+    from "clubFees", clubs 
+    where clubs.id = '${id}' and "clubId" = "clubFees".id
+    `
     const result = await runQuery(query)
     return result
 }
