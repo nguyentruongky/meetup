@@ -160,11 +160,11 @@ export const saveEnrollment = async (
 }
 
 export const setFavorite = async (clubId: string, userId: string) => {
-    const checkFavoriteQuery = `select count("userId") in "favoriteClubs  where "userId" = ${Utility.esc(
+    const checkFavoriteQuery = `select count("userId") from "favoriteClubs" where "userId" = ${Utility.esc(
         userId
-    )} and "clubId" = ${Utility.esc(clubId)}"`
+    )} and "clubId" = ${Utility.esc(clubId)}`
     const result = await runQuery(checkFavoriteQuery)
-    if (result.count === 0) {
+    if (result.rows[0].count == 0) {
         const params: any = {
             clubId: clubId,
             userId: userId

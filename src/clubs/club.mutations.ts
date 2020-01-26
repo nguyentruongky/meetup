@@ -98,18 +98,17 @@ export const mutations: Types.MutationResolvers = {
         return SQL.Club.addFee(fee).then(result => {
             return fee
         })
+    },
+
+    favorite: (root, args, ctx): Promise<boolean> => {
+        const user: Types.MUser = ctx.user
+        if (user == undefined) {
+            throw MError.Unauthorized
+        }
+
+        const clubId = args.clubId
+        return SQL.Club.setFavorite(clubId, user.id)
     }
-
-    // favorite: (root, args, ctx): Promise<Boolean> => {
-    //     const user: MUser = ctx.user
-    //     if (user == undefined) {
-    //         throw new Error("Login needed")
-    //     }
-
-    //     const clubId = args.clubId
-    //     const sql = new ClubSQL()
-    //     return sql.setFavorite(clubId, user.id)
-    // }
 }
 
 async function joinClubIfAvailable(clubId: string, user: Types.MUser) {
